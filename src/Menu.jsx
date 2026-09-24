@@ -10,8 +10,8 @@ import CategorySection from "./components/CategorySection";
 import MenuFooter from "./components/MenuFooter";
 import ImageLightbox from "./components/ImageLightbox";
 import FavoritesSheet from "./components/FavoritesSheet";
-import SizePicker from "./components/SizePicker";
-import Splash from "./components/Splash";
+import ItemModal from "./components/ItemModal";
+import SplashScreen from "./components/SplashScreen";
 
 const read = (key, fallback) => {
   try {
@@ -26,7 +26,7 @@ const norm = (s) =>
   s.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f\u064B-\u065F\u0670]/g, "").replace(/ة/g, "ه").replace(/ى/g, "ي").trim();
 
 const floatBtn =
-  "fixed bottom-4 z-40 flex items-center justify-center rounded-full shadow-lg transition active:scale-95";
+  "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex items-center justify-center rounded-full shadow-lg transition active:scale-95";
 
 export default function Menu() {
   const [lang, setLang] = useState(() => (read("menu-lang", "en") === "ar" ? "ar" : "en"));
@@ -58,6 +58,14 @@ export default function Menu() {
   const closeSheet = useCallback(() => setSheet(false), []);
   const [pick, setPick] = useState(null); // item whose size is being chosen
   const closePick = useCallback(() => setPick(null), []);
+
+  // Menu fades in as the splash fades out (safety timer so the page can never stay hidden)
+  const [entered, setEntered] = useState(false);
+  const onSplashDone = useCallback(() => setEntered(true), []);
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 3000);
+    return () => clearTimeout(t);
+  }, []);
   // Heart on a plain item: add 1 / remove. Quantities are changed in "My picks" (or the size picker).
   const toggleFav = useCallback(
     (key) =>
@@ -165,7 +173,10 @@ export default function Menu() {
       className="min-h-screen bg-slate-100 text-slate-900 transition-colors duration-300 dark:bg-slate-900 dark:text-slate-100"
       style={{ fontFamily: "'Readex Pro', system-ui, sans-serif" }}
     >
-      <Splash lang={lang} />
+      <SplashScreen lang={lang} onDone={onSplashDone} />
+      {/* Soft brand glow behind everything (gives the glass cards something to blur) */}
+      <div aria-hidden="true" className="bg-glow pointer-events-none fixed inset-0 z-0" />
+      <div className={`relative z-10 transition-opacity duration-700 ${entered ? "opacity-100" : "opacity-0"}`}>
 
       {/* Sticky top bar: header + main tabs + category anchors */}
       <div className="sticky top-0 z-40 border-b border-slate-200 bg-slate-100/90 backdrop-blur-md transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900/90">
@@ -190,7 +201,7 @@ export default function Menu() {
           {!q && main === "All" && CARD_EXTRAS.upgrades && <AddonsBanner lang={lang} />}
           {sections.length ? (
             sections.map((s) => (
-              <CategorySection key={s.id} section={s} lang={lang} onZoom={setZoom} favs={favs} onToggleFav={toggleFav} onPickSizes={setPick} />
+              <CategorySection key={s.id} section={s} lang={lang} onZoom={setZoom} favs={favs} onToggleFav={toggleFav} onOpen={setPick} />
             ))
           ) : (
             <div className="py-16 text-center">
@@ -224,8 +235,11 @@ export default function Menu() {
       {sheet && favEntries.length > 0 && (
         <FavoritesSheet entries={favEntries} lang={lang} onQty={setQty} onClear={() => setFavs(new Map())} onClose={closeSheet} />
       )}
-      {pick && <SizePicker item={pick} lang={lang} favs={favs} onQty={setQty} onClose={closePick} />}
+      {pick && (
+        <ItemModal item={pick} category={CATEGORIES.find((c) => c.id === pick.category)} lang={lang} favs={favs} onQty={setQty} onClose={closePick} />
+      )}
       {zoom && <ImageLightbox item={zoom} lang={lang} onClose={closeZoom} />}
+      </div>
     </div>
   );
 }

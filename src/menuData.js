@@ -1,11 +1,12 @@
 // ============================================================================
-// ✏️  EDIT THIS FILE ONLY — every piece of menu content lives here.
+// ✏️  EDIT THIS FILE ONLY: every piece of menu content lives here.
 // Sections: 1) Store  2) UI text  3) Tags  4) Add-ons  5) Categories  6) Items
 // ============================================================================
 
 // ─── 1) STORE BRANDING ── replace with your logo + name ──────────────────────
 export const STORE = {
-  logo: "/logo.png", // file lives in /public
+  logo: "/logo.png", // small logo for the header (file lives in /public)
+  logoHd: "/logo-hd.webp", // large logo for the splash screen, so it stays sharp
   name: { en: "Sixty Six", ar: "ستة وستين" },
   tagline: { en: "Coffee & Shisha", ar: "قهوة ونرجيلة" },
 };
@@ -24,7 +25,7 @@ export const UI = {
   searchPlaceholder: { en: "Search the menu", ar: "ابحث في المنيو" },
   noResults: { en: "No items found", ar: "لا توجد نتائج" },
   noResultsHint: { en: "Try a different name or clear the search.", ar: "جرّب اسماً آخر أو امسح البحث." },
-  copy: { en: "Copy", ar: "نسخ" },
+  copy: { en: "Copy password", ar: "نسخ كلمة السر" },
   copied: { en: "Copied", ar: "تم النسخ" },
   map: { en: "Find us on the map", ar: "موقعنا على الخريطة" },
   close: { en: "Close", ar: "إغلاق" },
@@ -39,6 +40,15 @@ export const UI = {
   favTotal: { en: "Total", ar: "المجموع" },
   less: { en: "Less", ar: "أقل" },
   more: { en: "More", ar: "أكثر" },
+  categoryLabel: { en: "Category", ar: "القسم" },
+  priceLabel: { en: "Price", ar: "السعر" },
+  waTitle: { en: "We value your feedback!", ar: "رأيك يهمنا!" },
+  waBody: { en: "Tell us how we did. Chat with us on WhatsApp.", ar: "أخبرنا عن تجربتك، وتواصل معنا عبر الواتساب." },
+  waCta: { en: "Chat with us", ar: "تواصل معنا" },
+  waText: { en: "Hello Sixty Six! I'd like to share my feedback: ", ar: "مرحباً ستة وستين! أود مشاركة رأيي: " },
+  wifiTitle: { en: "Wi-Fi", ar: "الواي فاي" },
+  wifiName: { en: "Network", ar: "الشبكة" },
+  wifiPass: { en: "Password", ar: "كلمة السر" },
 };
 
 // ─── 3) TAGS ── key = value used in item.tags. Add new tags here. ────────────
@@ -52,7 +62,7 @@ export const TAG_LABELS = {
   Special: { en: "Special", ar: "مميز", className: "bg-violet-100 text-violet-800 dark:bg-violet-400/15 dark:text-violet-300" },
 };
 
-// ─── 3b) DIETARY ICONS ── item.diet = ["Vegan", "GlutenFree", ...] (icon-only, legend shown in footer)
+// ─── 3b) DIETARY ICONS ── item.diet = ["Vegan", "GlutenFree", ...] (shown when CARD_EXTRAS.diet is true)
 export const DIET = {
   Vegan: { icon: "Vegan", en: "Vegan", ar: "نباتي" },
   Spicy: { icon: "Flame", en: "Spicy", ar: "حار" },
@@ -61,19 +71,18 @@ export const DIET = {
   DairyFree: { icon: "MilkOff", en: "Dairy-free", ar: "خالٍ من الحليب" },
 };
 
-// ─── 3c) FOOTER INFO ── replace with your real details. Set a field to "" to hide it.
-// Fields left as "" are hidden in the footer. Fill in hours / Wi-Fi / Instagram / phone when you have them.
+// ─── 3c) FOOTER INFO ── fields left as "" are hidden. Fill in hours / Instagram / phone when you have them.
 export const INFO = {
   hours: { en: "", ar: "" },
-  wifi: { name: "", password: "" },
+  wifi: { name: "Cafe66", password: "81632719$" }, // shown in the footer with a copy button
   instagram: { handle: "", url: "" },
   map: "https://maps.app.goo.gl/k24SyjK34nwQ2u6n7?g_st=ic", // header pin + footer link
   phone: "",
+  whatsapp: "96176697624", // international format, digits only. Used for the feedback button
 };
 
 // ─── 4) ADD-ONS ──────────────────────────────────────────────────────────────
-// Item upgrades are plain strings (see items below). This map gives each one an
-// Arabic label. If a string isn't listed here, the English text is shown as-is.
+// Item upgrades are plain strings. This map gives each one an Arabic label (English shown if missing).
 export const UPGRADE_AR = {
   "+ $1 Extra Cheese": "+ 1$ جبنة إضافية",
   "+ $0.5 Espresso Shot": "+ 0.5$ شوت إسبريسو",
@@ -85,7 +94,7 @@ export const UPGRADE_AR = {
 };
 export const upgradeLabel = (text, lang) => (lang === "ar" && UPGRADE_AR[text]) || text;
 
-// Shown in the highlighted banner at the top of the menu:
+// Shown in the highlighted banner at the top (only when CARD_EXTRAS.upgrades is true):
 export const GENERAL_ADDONS = ["+ $0.5 Espresso Shot", "+ $0.75 Oat Milk", "+ $0.5 Whipped Cream", "+ $1 Extra Cheese"];
 
 // ─── 5) CATEGORIES ── order here = order on the page ─────────────────────────
@@ -93,9 +102,11 @@ export const GENERAL_ADDONS = ["+ $0.5 Espresso Shot", "+ $0.75 Oat Milk", "+ $0
 export const CATEGORIES = [
   { id: "Crepe", icon: "Sandwich", name: { en: "Crepes", ar: "الكريب" } },
   { id: "Plates", icon: "Cherry", name: { en: "Plates", ar: "الصحون" } },
+  { id: "Manakish", icon: "Pizza", name: { en: "Manaqeesh & Kaak", ar: "المناقيش والكعك" } },
   { id: "Cocktail", icon: "Martini", name: { en: "Cocktails", ar: "الكوكتيل" } },
   { id: "NaturalJuice", icon: "Citrus", name: { en: "Fresh Juices", ar: "العصائر الطبيعية" } },
   { id: "Milkshakes", icon: "Milk", name: { en: "Milkshakes", ar: "الميلك شيك" } },
+  { id: "ColdDrinks", icon: "CupSoda", name: { en: "Cold Drinks", ar: "المشروبات الباردة" } },
   { id: "HotDrinks", icon: "Coffee", name: { en: "Hot Drinks", ar: "المشروبات الساخنة" } },
   { id: "Shisha", icon: "Flame", name: { en: "Shisha", ar: "النرجيلة" } },
 ];
@@ -108,25 +119,19 @@ export const MAIN_TABS = [
   { id: "Special", en: "Shisha", ar: "النرجيلة" },
 ];
 
-// ─── 6) MENU ITEMS ── replace the mock items below with your real menu ───────
-// Images: paste any image URL (Unsplash, your CDN, or "/images/latte.jpg").
-// If an image fails to load, the card shows a fallback icon automatically.
-// mainCategory: "Food" | "Beverages" | "Special" (Shisha).  No descriptions by design.
-// Photos: an item shows its photo only when SHOW_IMAGES is true AND its `image` field is not empty
-// (e.g. image: "/images/latte.webp"). Every other item keeps the category illustration.
+// ─── 6) MENU ITEMS ── edit names, prices and notes here ──────────────────────
+// Show item photos on the cards? false = show the category illustration instead (no images needed).
 export const SHOW_IMAGES = false;
 
-// Extra info on the cards. Only name + price + icon show while these are false.
-// Set any of them to true to bring it back (the data stays in the items below).
+// Extra info on the cards. Set any of them to false to hide it (the data stays in the items below).
 export const CARD_EXTRAS = { tags: true, diet: false, upgrades: false, sizes: true, notes: true };
-// notes = the short playful tip under some item names (item.note = { en, ar }). Set notes: false to hide them all.
+// notes = the short playful tip under some item names (item.note = { en, ar }).
 
-const img = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&q=70`;
 // Larger version for the tap-to-zoom view (works with Unsplash URLs; local images are used as-is).
 export const bigImage = (url) => url.replace(/w=\d+/, "w=1200");
 // Sizes helper. Optional item fields:
-//   sizes: [sz("Small", "صغير", "4 USD"), sz("Large", "كبير", "5 USD")]  (replaces the single price pill)
-//   diet:  ["Vegan", "Spicy", "GlutenFree", "Nuts", "DairyFree"]
+//   sizes: [sz("Small", "صغير", "4"), sz("Large", "كبير", "5")]  (price = the lowest size)
+//   note: { en: "...", ar: "..." }   diet: ["Vegan", "Spicy", "GlutenFree", "Nuts", "DairyFree"]
 const sz = (en, ar, price) => ({ label: { en, ar }, price });
 
 // Placeholder photo per category (hidden while SHOW_IMAGES is false). Replace per item later if you like.
@@ -138,6 +143,11 @@ const IMG = {
   shake: "https://images.unsplash.com/photo-1572490122747-3968b75bf699?w=500&q=80",
   hot: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=500&q=80",
   shisha: "https://images.unsplash.com/photo-1574513904571-0f73b64ab226?w=500&q=80",
+  manakish: "https://images.unsplash.com/photo-1509722747041-616f39b57569?w=500&q=80",
+  pepsi: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80",
+  icetea: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80",
+  energy: "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=500&q=80",
+  water: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=500&q=80",
 };
 
 // Prices are plain numbers (the "$" is added automatically). Items with sizes: price = lowest size.
@@ -206,6 +216,26 @@ export const MENU_ITEMS = [
   { id: "sh2", name: { en: "Double Apple Gold", ar: "تفاحتين جولد" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
   { id: "sh3", name: { en: "Lemon & Mint", ar: "حامض ونعناع" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [], note: { en: "Cool clouds", ar: "غيوم منعشة" } },
   { id: "sh4", name: { en: "Grape", ar: "عنب" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
+
+  // ── Manaqeesh & Kaak ──
+  { id: "mk1", name: { en: "Zaatar", ar: "زعتر" }, price: "1", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk2", name: { en: "Cheese", ar: "جبنة" }, price: "2.30", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk3", name: { en: "Kishk", ar: "كشك" }, price: "2", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk4", name: { en: "Labneh", ar: "لبنة" }, price: "2", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk5", name: { en: "Half Zaatar & Half Cheese", ar: "نصف زعتر ونصف جبنة" }, price: "2", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk6", name: { en: "Picon Kaak", ar: "كعكة بيكون" }, price: "2.50", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk7", name: { en: "Mozzarella Kaak", ar: "كعكة موزاريلا" }, price: "3.50", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk8", name: { en: "Kashkaval & Mortadella Kaak", ar: "كعكة قشقوان ومورتاديلا" }, price: "4", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+  { id: "mk9", name: { en: "Smoked Turkey & Cheese Kaak", ar: "كعكة حبش مدخن مع جبنة" }, price: "3.50", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
+
+  // ── Cold Drinks ──
+  { id: "cd1", name: { en: "Pepsi", ar: "بيبسي" }, price: "1.50", image: IMG.pepsi, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd2", name: { en: "Ice Tea", ar: "آيس تي" }, price: "3", image: IMG.icetea, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd3", name: { en: "Red Bull", ar: "ريد بول" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd4", name: { en: "Boom Boom", ar: "بوم بوم" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd5", name: { en: "Hillsburg", ar: "هيلزبورغ" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd6", name: { en: "AMP Energy", ar: "أمب" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd7", name: { en: "Water", ar: "مياه" }, price: "0.50", image: IMG.water, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [], sizes: [sz("Small", "صغير", "0.50"), sz("Large", "كبير", "1.10")] },
 ];
 
 // ─── Data checker (development only): prints warnings in the browser console if the data has a mistake ───
@@ -219,6 +249,6 @@ if (import.meta.env?.DEV) {
     if (!cats.has(i.category)) console.warn("[menu] unknown category (item hidden):", i.id, i.category);
     if (!i.name?.en || !i.name?.ar) console.warn("[menu] missing English or Arabic name:", i.id);
     if (bad(i.price)) console.warn("[menu] price is not a number:", i.id, i.price);
-    i.sizes?.forEach((sz) => bad(sz.price) && console.warn("[menu] size price is not a number:", i.id, sz.label.en));
+    i.sizes?.forEach((s) => bad(s.price) && console.warn("[menu] size price is not a number:", i.id, s.label.en));
   });
 }

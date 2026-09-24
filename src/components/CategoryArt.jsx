@@ -12,6 +12,18 @@ const ART = {
       <path d="M48 28 h4 a6 6 0 0 1 0 12 h-5" fill="none" stroke="#94A3B8" strokeWidth="2.5" strokeLinecap="round" />
     </>
   ),
+  ColdDrinks: (
+    <>
+      <ellipse cx="32" cy="58" rx="17" ry="3" fill="#CBD5E1" fillOpacity=".6" />
+      <rect x="20" y="10" width="24" height="46" rx="5" fill="#38BDF8" />
+      <rect x="22" y="6" width="20" height="6" rx="2" fill="#CBD5E1" />
+      <rect x="20" y="25" width="24" height="12" fill="#F8FAFC" />
+      <path d="M26 31 h12" stroke="#0EA5E9" strokeWidth="2.5" strokeLinecap="round" />
+      <rect x="45" y="40" width="11" height="11" rx="2.5" fill="#E0F2FE" stroke="#7DD3FC" strokeWidth="1.5" transform="rotate(12 50 45)" />
+      <circle className="bubble art-anim" cx="26" cy="46" r="1.6" fill="#BAE6FD" />
+      <circle className="bubble art-anim" cx="36" cy="44" r="1.3" fill="#BAE6FD" style={{ animationDelay: "1s" }} />
+    </>
+  ),
   Crepe: (
     <>
       <ellipse cx="32" cy="50" rx="26" ry="7" fill="#E2E8F0" />

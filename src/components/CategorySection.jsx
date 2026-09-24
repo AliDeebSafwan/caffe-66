@@ -2,7 +2,7 @@ import { getIcon } from "./categoryIcons";
 import MenuItemCard from "./MenuItemCard";
 import CategoryArt, { hasArt } from "./CategoryArt";
 
-export default function CategorySection({ section, lang, onZoom, favs, onToggleFav, onPickSizes }) {
+export default function CategorySection({ section, lang, onZoom, favs, onToggleFav, onOpen }) {
   const Icon = getIcon(section.icon);
   return (
     // id is the anchor target for CategoryNav; scroll-mt clears the sticky header
@@ -25,7 +25,7 @@ export default function CategorySection({ section, lang, onZoom, favs, onToggleF
             onZoom={onZoom}
             favs={favs}
             onToggleFav={onToggleFav}
-            onPickSizes={onPickSizes}
+            onOpen={onOpen}
           />
         ))}
       </div>

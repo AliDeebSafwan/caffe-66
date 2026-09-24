@@ -4,14 +4,22 @@ import { CARD_EXTRAS, CATEGORIES, DIET, SHOW_IMAGES, TAG_LABELS, UI, favKey, mon
 import { getIcon } from "./categoryIcons";
 import CategoryArt, { hasArt } from "./CategoryArt";
 
-export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onToggleFav, onPickSizes }) {
+export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onToggleFav, onOpen }) {
   const [failed, setFailed] = useState(false);
   const [shown, setShown] = useState(false);
+  const [settled, setSettled] = useState(false);
   const ref = useRef(null);
   const CategoryIcon = getIcon(CATEGORIES.find((c) => c.id === item.category)?.icon);
   const pill = "rounded-full bg-brand-700 px-2.5 py-1 text-xs font-bold text-white dark:bg-brand-400 dark:text-slate-900";
   const sized = CARD_EXTRAS.sizes && item.sizes?.length > 0;
   const isFav = sized ? item.sizes.some((sz) => favs.has(favKey(item, sz))) : favs.has(item.id);
+
+  // Stop the stagger delay once the reveal is over, so hover/press feel instant
+  useEffect(() => {
+    if (!shown) return;
+    const t = setTimeout(() => setSettled(true), 900);
+    return () => clearTimeout(t);
+  }, [shown]);
 
   // Slide/fade in the first time the card scrolls into view
   useEffect(() => {
@@ -35,10 +43,10 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
 
   const heart = (
     <button
-      onClick={() => (sized ? onPickSizes(item) : onToggleFav(item.id))}
+      onClick={() => (sized ? onOpen(item) : onToggleFav(item.id))}
       aria-pressed={isFav}
       aria-label={isFav ? UI.favRemove[lang] : UI.favAdd[lang]}
-      className="flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-full transition active:scale-90 hover:bg-slate-100 dark:hover:bg-slate-700"
+      className="relative z-20 flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-full transition active:scale-90 hover:bg-slate-100 dark:hover:bg-slate-700"
     >
       <Heart size={19} className={`transition-all duration-300 ${isFav ? "scale-110 fill-rose-500 text-rose-500" : "text-slate-400"}`} />
     </button>
@@ -47,8 +55,8 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
   return (
     <article
       ref={ref}
-      style={{ transitionDelay: shown ? `${(index % 3) * 70}ms` : "0ms" }}
-      className={`relative flex overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition duration-500 motion-reduce:!translate-y-0 motion-reduce:!opacity-100 motion-reduce:transition-none dark:bg-slate-800 dark:ring-slate-700 ${
+      style={{ transitionDelay: shown && !settled ? `${(index % 3) * 70}ms` : "0ms" }}
+      className={`relative flex overflow-hidden rounded-2xl bg-white/85 shadow-sm ring-1 ring-slate-200/80 transition duration-500 hover:-translate-y-0.5 hover:shadow-md active:scale-[.99] motion-reduce:!translate-y-0 motion-reduce:!opacity-100 motion-reduce:transition-none dark:bg-slate-800/80 dark:ring-slate-700/70 ${
         shown ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
       } ${SHOW_IMAGES ? "sm:flex-col" : "gap-3 p-3"}`}
     >
@@ -56,7 +64,7 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
       {SHOW_IMAGES ? (
         <div className="relative min-h-[8rem] w-28 shrink-0 bg-slate-200 dark:bg-slate-700 sm:aspect-[4/3] sm:min-h-0 sm:w-full">
           {item.image && !failed ? (
-            <button onClick={() => onZoom(item)} aria-label={item.name[lang]} className="absolute inset-0 block cursor-zoom-in">
+            <button onClick={() => onZoom(item)} aria-label={item.name[lang]} className="absolute inset-0 z-20 block cursor-zoom-in">
               <img src={item.image} alt="" width={600} height={450} loading="lazy" decoding="async" onError={() => setFailed(true)} className="h-full w-full object-cover" />
             </button>
           ) : (
@@ -101,7 +109,7 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
             {CARD_EXTRAS.tags && item.tags?.map((t) => {
               const tag = TAG_LABELS[t];
               return (
-                <li key={t} className={`rounded-full px-2 py-0.5 text-xs font-medium ${tag?.className ?? "bg-slate-200 text-slate-700"}`}>
+                <li key={t} className={`rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ring-black/5 dark:ring-white/10 ${tag?.className ?? "bg-slate-200 text-slate-700"}`}>
                   {tag ? tag[lang] : t}
                 </li>
               );
@@ -130,7 +138,14 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
         )}
       </div>
 
-      {SHOW_IMAGES ? <div className="absolute end-2 top-2 rounded-full bg-white/85 dark:bg-slate-800/85">{heart}</div> : heart}
+      {/* Whole card is tappable (opens the item popup); the heart sits above it */}
+      <button
+        type="button"
+        onClick={() => onOpen(item)}
+        aria-label={item.name[lang]}
+        className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-2"
+      />
+      {SHOW_IMAGES ? <div className="absolute end-2 top-2 z-20 rounded-full bg-white/85 dark:bg-slate-800/85">{heart}</div> : heart}
     </article>
   );
 }

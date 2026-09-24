@@ -1,9 +1,21 @@
 import {
-  Coffee, Sandwich, Martini, CupSoda, Citrus, Cherry, Milk, Pizza, Flame, Utensils, // categories
+  Coffee, Sandwich, Martini, CupSoda, Citrus, Cherry, Milk, Pizza, Flame, Utensils, // category icons
   Vegan, WheatOff, Nut, MilkOff, // dietary icons
 } from "lucide-react";
 
-// Add any lucide icon here, then reference its key in CATEGORIES / DIET (menuData.js).
-const ICONS = { Coffee, Sandwich, Martini, CupSoda, Citrus, Cherry, Milk, Pizza, Flame, Vegan, WheatOff, Nut, MilkOff };
+// The key here is the icon name written in CATEGORIES (menuData.js). To use a new lucide icon:
+// import it above, add it to this object, then set `icon: "YourIcon"` on the category.
+const ICONS = {
+  Coffee, // Hot Drinks
+  Sandwich, // Crepes
+  Martini, // Cocktails
+  CupSoda, // Cold Drinks (soft drinks, energy drinks, water)
+  Citrus, // Fresh Juices
+  Cherry, // Plates
+  Milk, // Milkshakes
+  Pizza, // Manaqeesh & Kaak
+  Flame, // Shisha
+  Vegan, WheatOff, Nut, MilkOff, // dietary icons
+};
 
-export const getIcon = (name) => ICONS[name] || Utensils;
+export const getIcon = (name) => ICONS[name] || Utensils; // Utensils = safe fallback

@@ -10,3 +10,6 @@
 
 /logo.*
   Cache-Control: public, max-age=604800
+
+/logo-hd.webp
+  Cache-Control: public, max-age=604800
