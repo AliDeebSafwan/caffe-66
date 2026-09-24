@@ -53,7 +53,7 @@ export default function SizePicker({ item, lang, favs, onQty, onClose }) {
           })}
         </ul>
 
-        <button onClick={onClose} className="mt-4 w-full rounded-full bg-slate-100 py-2.5 text-sm font-medium active:scale-[.98] dark:bg-slate-700">
+        <button autoFocus onClick={onClose} className="mt-4 w-full rounded-full bg-slate-100 py-2.5 text-sm font-medium active:scale-[.98] dark:bg-slate-700">
           {UI.done[lang]}
         </button>
       </div>

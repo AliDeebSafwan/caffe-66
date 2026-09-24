@@ -18,7 +18,7 @@ export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose 
     };
   }, [onClose]);
 
-  const unit = (e) => parseFloat(e.size ? e.size.price : e.item.price) || 0;
+  const unit = (e) => parseFloat(String(e.size ? e.size.price : e.item.price).replace(",", ".")) || 0;
   const total = entries.reduce((sum, e) => sum + unit(e) * e.qty, 0);
 
   return (
@@ -35,7 +35,7 @@ export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose 
       >
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">{UI.favTitle[lang]}</h2>
-          <button onClick={onClose} aria-label={UI.close[lang]} className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+          <button autoFocus onClick={onClose} aria-label={UI.close[lang]} className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
             <X size={20} />
           </button>
         </div>

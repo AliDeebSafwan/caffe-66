@@ -29,10 +29,12 @@ const floatBtn =
   "fixed bottom-4 z-40 flex items-center justify-center rounded-full shadow-lg transition active:scale-95";
 
 export default function Menu() {
-  const [lang, setLang] = useState(() => read("menu-lang", "en"));
-  const [theme, setTheme] = useState(() =>
-    read("menu-theme", window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-  );
+  const [lang, setLang] = useState(() => (read("menu-lang", "en") === "ar" ? "ar" : "en"));
+  const [theme, setTheme] = useState(() => {
+    const saved = read("menu-theme", "");
+    if (saved === "dark" || saved === "light") return saved;
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
   const [query, setQuery] = useState("");
   const [main, setMain] = useState("All");
   const [zoom, setZoom] = useState(null);
@@ -42,7 +44,12 @@ export default function Menu() {
   const [favs, setFavs] = useState(() => {
     try {
       const saved = JSON.parse(read("menu-favs", "{}"));
-      return new Map(Array.isArray(saved) ? saved.map((k) => [k, 1]) : Object.entries(saved));
+      const pairs = Array.isArray(saved) ? saved.map((k) => [k, 1]) : Object.entries(saved || {});
+      return new Map(
+        pairs
+          .filter(([k, v]) => typeof k === "string" && Number.isFinite(v) && v > 0)
+          .map(([k, v]) => [k, Math.min(Math.floor(v), 20)])
+      );
     } catch {
       return new Map();
     }
@@ -120,6 +127,7 @@ export default function Menu() {
     [q, main]
   );
   const [activeId, setActiveId] = useState(sections[0]?.id);
+  useEffect(() => setActiveId(sections[0]?.id), [sections]); // tab/search changed: reset the highlighted category
 
   const changeMain = (id) => {
     setMain(id);

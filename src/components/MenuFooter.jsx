@@ -27,7 +27,7 @@ export default function MenuFooter({ lang }) {
   const link = "font-medium text-brand-700 underline-offset-2 hover:underline dark:text-brand-300";
 
   return (
-    <footer className="mx-auto max-w-6xl px-4 pb-12">
+    <footer className="mx-auto max-w-6xl px-4 pb-28">
       <div className="space-y-3 rounded-3xl bg-white p-5 ring-1 ring-slate-200 transition-colors duration-300 dark:bg-slate-800 dark:ring-slate-700">
         <h2 className="text-lg font-bold">{STORE.name[lang]}</h2>
 

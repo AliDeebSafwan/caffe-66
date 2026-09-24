@@ -92,9 +92,6 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
         {/* Playful one-line tip (only on some items) */}
         {CARD_EXTRAS.notes && item.note && (
           <p className="flex w-fit max-w-full items-center gap-1.5 rounded-lg bg-brand-50 px-2 py-1 text-xs font-medium text-brand-800 dark:bg-brand-400/10 dark:text-brand-200">
-            <span aria-hidden="true" className={`inline-block text-sm ${shown ? "splash-pop" : ""}`} style={{ animationDelay: "350ms" }}>
-              {item.note.emoji}
-            </span>
             <span className="truncate">{item.note[lang]}</span>
           </p>
         )}

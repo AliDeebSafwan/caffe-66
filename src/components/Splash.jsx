@@ -4,9 +4,15 @@ import { STORE } from "../menuData";
 
 // Short opening screen (about 1.3s). Tap to skip. Skipped for reduced-motion users.
 export default function Splash({ lang }) {
-  const [phase, setPhase] = useState(() =>
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ? "gone" : "show"
-  );
+  const [phase, setPhase] = useState(() => {
+    let seen = false;
+    try {
+      seen = !!sessionStorage.getItem("menu-splash");
+      sessionStorage.setItem("menu-splash", "1");
+    } catch {}
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    return seen || reduced ? "gone" : "show";
+  });
 
   useEffect(() => {
     if (phase === "gone") return;
