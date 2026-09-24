@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
-import { UI, money } from "../menuData";
+import { CATEGORIES, UI, money } from "../menuData";
+import { getIcon } from "./categoryIcons";
 import Stepper from "./Stepper";
 
 const fmt = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
@@ -42,18 +43,31 @@ export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose 
         <p className="mb-2 text-sm text-slate-500 dark:text-slate-400">{UI.favHint[lang]}</p>
 
         <ul className="divide-y divide-slate-100 dark:divide-slate-700">
-          {entries.map((e) => (
+          {entries.map((e) => {
+            const cat = CATEGORIES.find((c) => c.id === e.item.category);
+            const CatIcon = getIcon(cat?.icon);
+            return (
             <li key={e.key} className="flex items-center gap-3 py-3">
               <span className="min-w-0 flex-1">
                 <span className="block font-medium leading-snug">{e.item.name[lang]}</span>
-                {e.size && <span className="block text-sm text-slate-500 dark:text-slate-400">{e.size.label[lang]}</span>}
+                {/* Which category the item belongs to, plus the chosen size */}
+                <span className="mt-1 flex flex-wrap items-center gap-1.5">
+                  {cat && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-medium text-brand-800 dark:bg-brand-400/15 dark:text-brand-200">
+                      <CatIcon size={12} />
+                      {cat.name[lang]}
+                    </span>
+                  )}
+                  {e.size && <span className="text-sm text-slate-500 dark:text-slate-400">{e.size.label[lang]}</span>}
+                </span>
               </span>
               <span dir="ltr" className="w-14 text-end text-sm font-bold text-brand-700 dark:text-brand-300">
                 {money(fmt(unit(e) * e.qty))}
               </span>
               <Stepper qty={e.qty} lang={lang} onChange={(q) => onQty(e.key, q)} />
             </li>
-          ))}
+            );
+          })}
         </ul>
 
         {/* Grand total of everything picked */}
