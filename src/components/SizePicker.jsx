@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { Check } from "lucide-react";
 import { UI, favKey, money } from "../menuData";
+import Stepper from "./Stepper";
 
-// Opens when the heart is tapped on an item that has sizes: pick Medium, Large, or both.
-export default function SizePicker({ item, lang, favs, onToggle, onClose }) {
+// Opens when the heart is tapped on an item that has sizes: choose how many of each size.
+export default function SizePicker({ item, lang, favs, onQty, onClose }) {
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
     const prev = document.body.style.overflow;
@@ -33,26 +33,21 @@ export default function SizePicker({ item, lang, favs, onToggle, onClose }) {
         <ul className="space-y-2">
           {item.sizes.map((s) => {
             const key = favKey(item, s);
-            const on = favs.has(key);
+            const qty = favs.get(key) || 0;
             return (
-              <li key={key}>
-                <button
-                  onClick={() => onToggle(key)}
-                  aria-pressed={on}
-                  className={`flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-base font-medium ring-1 transition active:scale-[.98] ${
-                    on
-                      ? "bg-brand-700 text-white ring-brand-700 dark:bg-brand-400 dark:text-slate-900 dark:ring-brand-400"
-                      : "bg-slate-50 text-slate-800 ring-slate-200 dark:bg-slate-700/50 dark:text-slate-100 dark:ring-slate-600"
-                  }`}
-                >
-                  <span className="flex items-center gap-2.5">
-                    <span className={`flex h-5 w-5 items-center justify-center rounded-full ring-1 ${on ? "bg-white/25 ring-white/60" : "ring-slate-300 dark:ring-slate-500"}`}>
-                      {on && <Check size={14} />}
-                    </span>
-                    {s.label[lang]}
-                  </span>
-                  <span dir="ltr" className="font-bold">{money(s.price)}</span>
-                </button>
+              <li
+                key={key}
+                className={`flex items-center justify-between gap-3 rounded-2xl px-4 py-3 ring-1 transition-colors ${
+                  qty > 0
+                    ? "bg-brand-50 ring-brand-700 dark:bg-brand-400/10 dark:ring-brand-400"
+                    : "bg-slate-50 ring-slate-200 dark:bg-slate-700/50 dark:ring-slate-600"
+                }`}
+              >
+                <span>
+                  <span className="block font-medium">{s.label[lang]}</span>
+                  <span dir="ltr" className="text-sm font-bold text-brand-700 dark:text-brand-300">{money(s.price)}</span>
+                </span>
+                <Stepper qty={qty} lang={lang} onChange={(q) => onQty(key, q)} />
               </li>
             );
           })}

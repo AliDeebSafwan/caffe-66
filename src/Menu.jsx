@@ -41,20 +41,31 @@ export default function Menu() {
   // Favorites ("My picks"), remembered on this phone only
   const [favs, setFavs] = useState(() => {
     try {
-      return new Set(JSON.parse(read("menu-favs", "[]")));
+      const saved = JSON.parse(read("menu-favs", "{}"));
+      return new Map(Array.isArray(saved) ? saved.map((k) => [k, 1]) : Object.entries(saved));
     } catch {
-      return new Set();
+      return new Map();
     }
   });
   const [sheet, setSheet] = useState(false);
   const closeSheet = useCallback(() => setSheet(false), []);
   const [pick, setPick] = useState(null); // item whose size is being chosen
   const closePick = useCallback(() => setPick(null), []);
+  // Heart on a plain item: add 1 / remove. Quantities are changed in "My picks" (or the size picker).
   const toggleFav = useCallback(
-    (id) =>
+    (key) =>
       setFavs((prev) => {
-        const next = new Set(prev);
-        next.has(id) ? next.delete(id) : next.add(id);
+        const next = new Map(prev);
+        next.has(key) ? next.delete(key) : next.set(key, 1);
+        return next;
+      }),
+    []
+  );
+  const setQty = useCallback(
+    (key, qty) =>
+      setFavs((prev) => {
+        const next = new Map(prev);
+        qty > 0 ? next.set(key, Math.min(qty, 20)) : next.delete(key);
         return next;
       }),
     []
@@ -64,14 +75,15 @@ export default function Menu() {
     () =>
       MENU_ITEMS.flatMap((item) => {
         if (CARD_EXTRAS.sizes && item.sizes?.length)
-          return item.sizes.filter((sz) => favs.has(favKey(item, sz))).map((size) => ({ key: favKey(item, size), item, size }));
-        return favs.has(item.id) ? [{ key: item.id, item, size: null }] : [];
+          return item.sizes.filter((sz) => favs.has(favKey(item, sz))).map((size) => ({ key: favKey(item, size), item, size, qty: favs.get(favKey(item, size)) }));
+        return favs.has(item.id) ? [{ key: item.id, item, size: null, qty: favs.get(item.id) }] : [];
       }),
     [favs]
   );
+  const favCount = favEntries.reduce((n, e) => n + e.qty, 0);
   useEffect(() => {
     try {
-      localStorage.setItem("menu-favs", JSON.stringify([...favs]));
+      localStorage.setItem("menu-favs", JSON.stringify(Object.fromEntries(favs)));
     } catch {}
   }, [favs]);
   useEffect(() => {
@@ -197,14 +209,14 @@ export default function Menu() {
         <button onClick={() => setSheet(true)} className={`${floatBtn} end-4 h-12 gap-2 bg-brand-700 px-4 font-medium text-white dark:bg-brand-400 dark:text-slate-900`}>
           <Heart size={18} className="fill-current" />
           {UI.favTitle[lang]}
-          <span className="rounded-full bg-white/25 px-2 text-sm">{favEntries.length}</span>
+          <span className="rounded-full bg-white/25 px-2 text-sm">{favCount}</span>
         </button>
       )}
 
       {sheet && favEntries.length > 0 && (
-        <FavoritesSheet entries={favEntries} lang={lang} onRemove={toggleFav} onClear={() => setFavs(new Set())} onClose={closeSheet} />
+        <FavoritesSheet entries={favEntries} lang={lang} onQty={setQty} onClear={() => setFavs(new Map())} onClose={closeSheet} />
       )}
-      {pick && <SizePicker item={pick} lang={lang} favs={favs} onToggle={toggleFav} onClose={closePick} />}
+      {pick && <SizePicker item={pick} lang={lang} favs={favs} onQty={setQty} onClose={closePick} />}
       {zoom && <ImageLightbox item={zoom} lang={lang} onClose={closeZoom} />}
     </div>
   );

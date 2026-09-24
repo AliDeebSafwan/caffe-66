@@ -29,13 +29,16 @@ export const UI = {
   map: { en: "Find us on the map", ar: "موقعنا على الخريطة" },
   close: { en: "Close", ar: "إغلاق" },
   favTitle: { en: "My picks", ar: "اختياراتي" },
-  favHint: { en: "Show this list to your waiter.", ar: "أرِ هذه القائمة للنادل." },
+  favHint: { en: "Adjust quantities, then show this list to your waiter.", ar: "عدّل الكميات ثم أرِ هذه القائمة للنادل." },
   favClear: { en: "Clear all", ar: "مسح الكل" },
   favAdd: { en: "Add to my picks", ar: "أضف إلى اختياراتي" },
   favRemove: { en: "Remove from my picks", ar: "إزالة من اختياراتي" },
   top: { en: "Back to top", ar: "للأعلى" },
   pickSize: { en: "Choose a size", ar: "اختر الحجم" },
   done: { en: "Done", ar: "تم" },
+  favTotal: { en: "Total", ar: "المجموع" },
+  less: { en: "Less", ar: "أقل" },
+  more: { en: "More", ar: "أكثر" },
 };
 
 // ─── 3) TAGS ── key = value used in item.tags. Add new tags here. ────────────
@@ -115,7 +118,8 @@ export const SHOW_IMAGES = false;
 
 // Extra info on the cards. Only name + price + icon show while these are false.
 // Set any of them to true to bring it back (the data stays in the items below).
-export const CARD_EXTRAS = { tags: true, diet: false, upgrades: false, sizes: true };
+export const CARD_EXTRAS = { tags: true, diet: false, upgrades: false, sizes: true, notes: true };
+// notes = the short playful tip under some item names (item.note = { emoji, en, ar }). Set notes: false to hide them all.
 
 const img = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=600&q=70`;
 // Larger version for the tap-to-zoom view (works with Unsplash URLs; local images are used as-is).
@@ -139,19 +143,19 @@ const IMG = {
 // Prices are plain numbers (the "$" is added automatically). Items with sizes: price = lowest size.
 export const MENU_ITEMS = [
   // ── Crepes ──
-  { id: "cr1", name: { en: "Nutella Crepe", ar: "كريب نوتيلا" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
+  { id: "cr1", name: { en: "Nutella Crepe", ar: "كريب نوتيلا" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [], note: { emoji: "🍫", en: "Classic comfort", ar: "دفء كلاسيكي" } },
   { id: "cr2", name: { en: "Oreo Crepe", ar: "كريب أوريو" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
-  { id: "cr3", name: { en: "Kinder Crepe", ar: "كريب كيندر" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
+  { id: "cr3", name: { en: "Kinder Crepe", ar: "كريب كيندر" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [], note: { emoji: "🧸", en: "Kid at heart", ar: "للطفل الذي فيك" } },
   { id: "cr4", name: { en: "Fettuccine Crepe", ar: "كريب فوتوتشيني" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
   { id: "cr5", name: { en: "Fruits Crepe", ar: "كريب فواكه" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Fresh"] },
   { id: "cr6", name: { en: "Lotus Crepe", ar: "كريب لوتس" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
-  { id: "cr7", name: { en: "Dubai Chocolate Crepe", ar: "كريب شوكولا دبي" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Trending"] },
-  { id: "cr8", name: { en: "Sixty Six Crepe", ar: "كريب ستة وستين" }, price: "10", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Signature"] },
+  { id: "cr7", name: { en: "Dubai Chocolate Crepe", ar: "كريب شوكولا دبي" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Trending"], note: { emoji: "📸", en: "Worth a photo", ar: "تستاهل صورة" } },
+  { id: "cr8", name: { en: "Sixty Six Crepe", ar: "كريب ستة وستين" }, price: "10", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Signature"], note: { emoji: "🎁", en: "Treat yourself", ar: "دلّع نفسك" } },
 
   // ── Plates ──
   { id: "pl1", name: { en: "Ashta & Fruits Plate", ar: "صحن قشطة وفواكه" }, price: "10", image: IMG.plates, mainCategory: "Food", category: "Plates", upgrades: [], tags: [] },
   { id: "pl2", name: { en: "Ashta, Avocado & Nutella Plate", ar: "صحن قشطة أفوكادو نوتيلا" }, price: "10", image: IMG.plates, mainCategory: "Food", category: "Plates", upgrades: [], tags: [] },
-  { id: "pl3", name: { en: "Ashta, Avocado & Fruits Plate", ar: "صحن قشطة أفوكادو وفواكه" }, price: "12", image: IMG.plates, mainCategory: "Food", category: "Plates", upgrades: [], tags: ["Special"] },
+  { id: "pl3", name: { en: "Ashta, Avocado & Fruits Plate", ar: "صحن قشطة أفوكادو وفواكه" }, price: "12", image: IMG.plates, mainCategory: "Food", category: "Plates", upgrades: [], tags: ["Special"], note: { emoji: "🌙", en: "Sweet finish to the night", ar: "ختام حلو للسهرة" } },
 
   // ── Cocktails ──
   { id: "ck1", name: { en: "Banana Milk", ar: "موز بحليب" }, price: "3", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "3"), sz("Large", "كبير", "4")] },
@@ -161,10 +165,10 @@ export const MENU_ITEMS = [
   { id: "ck5", name: { en: "Avocado Lotus", ar: "أفوكادو لوتس" }, price: "6", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "6"), sz("Large", "كبير", "7")] },
   { id: "ck6", name: { en: "Avocado Cocktail", ar: "أفوكادو كوكتيل" }, price: "5", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "5"), sz("Large", "كبير", "6")] },
   { id: "ck7", name: { en: "Pieces Cocktail", ar: "كوكتيل الشقف" }, price: "5", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "5"), sz("Large", "كبير", "6")] },
-  { id: "ck8", name: { en: "Tahiti", ar: "تاهيتي" }, price: "7", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [] },
+  { id: "ck8", name: { en: "Tahiti", ar: "تاهيتي" }, price: "7", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], note: { emoji: "🌴", en: "Tropical escape", ar: "هروب استوائي" } },
   { id: "ck9", name: { en: "Kiwi Cocktail", ar: "كوكتيل بالكيوي" }, price: "7", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [] },
-  { id: "ck10", name: { en: "Sixty Six Cocktail", ar: "كوكتيل ستة وستين" }, price: "8", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: ["Signature"] },
-  { id: "ck11", name: { en: "Katyusha", ar: "كاتيوشا" }, price: "10", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [] },
+  { id: "ck10", name: { en: "Sixty Six Cocktail", ar: "كوكتيل ستة وستين" }, price: "8", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: ["Signature"], note: { emoji: "✨", en: "Our signature sip", ar: "رشفتنا المميزة" } },
+  { id: "ck11", name: { en: "Katyusha", ar: "كاتيوشا" }, price: "10", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], note: { emoji: "🔥", en: "For the bold", ar: "للجريئين" } },
   { id: "ck12", name: { en: "Extra Fruits Cup with Ashta", ar: "كوب فواكه إكسترا مع قشطة" }, price: "9", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [] },
 
   // ── Fresh Juices ──
@@ -172,9 +176,9 @@ export const MENU_ITEMS = [
   { id: "nj2", name: { en: "Orange & Carrot", ar: "برتقال وجزر" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
   { id: "nj3", name: { en: "Carrot", ar: "جزر" }, price: "2", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
   { id: "nj4", name: { en: "Apple", ar: "تفاح" }, price: "2", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
-  { id: "nj5", name: { en: "Lemonade & Mint", ar: "ليموناضة ونعنع" }, price: "3.50", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
+  { id: "nj5", name: { en: "Lemonade & Mint", ar: "ليموناضة ونعنع" }, price: "3.50", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [], note: { emoji: "🧊", en: "Instant cool-down", ar: "تبريد فوري" } },
   { id: "nj6", name: { en: "Lemonade", ar: "ليموناضة" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
-  { id: "nj7", name: { en: "Pomegranate", ar: "رمان" }, price: "6", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
+  { id: "nj7", name: { en: "Pomegranate", ar: "رمان" }, price: "6", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [], note: { emoji: "💎", en: "Ruby refresh", ar: "انتعاش ياقوتي" } },
   { id: "nj8", name: { en: "Strawberry", ar: "فريز" }, price: "3.50", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
   { id: "nj9", name: { en: "Mango", ar: "مانجا" }, price: "5", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
   { id: "nj10", name: { en: "Guava", ar: "جوافة" }, price: "5", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
@@ -183,23 +187,23 @@ export const MENU_ITEMS = [
   { id: "ms1", name: { en: "Oreo", ar: "أوريو" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
   { id: "ms2", name: { en: "Strawberry", ar: "فريز" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
   { id: "ms3", name: { en: "Lotus", ar: "لوتس" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
-  { id: "ms4", name: { en: "Nutella", ar: "نوتيلا" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
+  { id: "ms4", name: { en: "Nutella", ar: "نوتيلا" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [], note: { emoji: "🍨", en: "Dessert in a glass", ar: "حلوى بكأس" } },
   { id: "ms5", name: { en: "Vanilla", ar: "فانيليا" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
   { id: "ms6", name: { en: "Brownie", ar: "براوني" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
-  { id: "ms7", name: { en: "Blueberry", ar: "بلوبيري" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
+  { id: "ms7", name: { en: "Blueberry", ar: "بلوبيري" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [], note: { emoji: "🫐", en: "Berry good mood", ar: "مزاج التوت" } },
 
   // ── Hot Drinks ──
   { id: "hd1", name: { en: "Espresso", ar: "إسبريسو" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
-  { id: "hd2", name: { en: "Cappuccino", ar: "كابتشينو" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
+  { id: "hd2", name: { en: "Cappuccino", ar: "كابتشينو" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], note: { emoji: "☀️", en: "Morning ritual", ar: "طقس الصباح" } },
   { id: "hd3", name: { en: "Nescafe", ar: "نسكافيه" }, price: "2", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
-  { id: "hd4", name: { en: "Hot Chocolate", ar: "هوت شوكليت" }, price: "3", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
-  { id: "hd5", name: { en: "Turkish Coffee", ar: "قهوة تركية" }, price: "3", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], sizes: [sz("Small", "صغير", "3"), sz("Large", "كبير", "3.50")] },
+  { id: "hd4", name: { en: "Hot Chocolate", ar: "هوت شوكليت" }, price: "3", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], note: { emoji: "🤗", en: "A warm hug", ar: "حضنٌ دافئ" } },
+  { id: "hd5", name: { en: "Turkish Coffee", ar: "قهوة تركية" }, price: "3", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], sizes: [sz("Small", "صغير", "3"), sz("Large", "كبير", "3.50")], note: { emoji: "💬", en: "Slow sip, long chat", ar: "رشفة هادئة وحديث طويل" } },
   { id: "hd6", name: { en: "Tea", ar: "شاي" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
-  { id: "hd7", name: { en: "Mixed Herbal Tea", ar: "زهورات مشكلة" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
+  { id: "hd7", name: { en: "Mixed Herbal Tea", ar: "زهورات مشكلة" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], note: { emoji: "🌿", en: "Calm the evening", ar: "هدّئ مساءك" } },
 
   // ── Shisha ──
-  { id: "sh1", name: { en: "Double Apple Edara", ar: "تفاحتين إدارة" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
+  { id: "sh1", name: { en: "Double Apple Edara", ar: "تفاحتين إدارة" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [], note: { emoji: "👌", en: "The classic choice", ar: "الاختيار الكلاسيكي" } },
   { id: "sh2", name: { en: "Double Apple Gold", ar: "تفاحتين جولد" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
-  { id: "sh3", name: { en: "Lemon & Mint", ar: "حامض ونعناع" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
+  { id: "sh3", name: { en: "Lemon & Mint", ar: "حامض ونعناع" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [], note: { emoji: "☁️", en: "Cool clouds", ar: "غيوم منعشة" } },
   { id: "sh4", name: { en: "Grape", ar: "عنب" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
 ];
