@@ -13,6 +13,8 @@ export const STORE = {
 // Currency symbol shown before every price ("$6", "$3.50"). Prices in the data are plain numbers.
 export const CURRENCY = "$";
 export const money = (p) => `${CURRENCY}${p}`;
+// Key used by "My picks": plain item id, or "id:SizeName" when a size was chosen.
+export const favKey = (item, size) => (size ? `${item.id}:${size.label.en}` : item.id);
 
 // ─── 2) UI TEXT ──────────────────────────────────────────────────────────────
 export const UI = {
@@ -32,6 +34,8 @@ export const UI = {
   favAdd: { en: "Add to my picks", ar: "أضف إلى اختياراتي" },
   favRemove: { en: "Remove from my picks", ar: "إزالة من اختياراتي" },
   top: { en: "Back to top", ar: "للأعلى" },
+  pickSize: { en: "Choose a size", ar: "اختر الحجم" },
+  done: { en: "Done", ar: "تم" },
 };
 
 // ─── 3) TAGS ── key = value used in item.tags. Add new tags here. ────────────

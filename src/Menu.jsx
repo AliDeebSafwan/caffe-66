@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowUp, Heart } from "lucide-react";
-import { CARD_EXTRAS, CATEGORIES, MENU_ITEMS, UI } from "./menuData";
+import { CARD_EXTRAS, CATEGORIES, MENU_ITEMS, UI, favKey } from "./menuData";
 import MenuHeader from "./components/MenuHeader";
 import MainTabs from "./components/MainTabs";
 import CategoryNav from "./components/CategoryNav";
@@ -10,6 +10,7 @@ import CategorySection from "./components/CategorySection";
 import MenuFooter from "./components/MenuFooter";
 import ImageLightbox from "./components/ImageLightbox";
 import FavoritesSheet from "./components/FavoritesSheet";
+import SizePicker from "./components/SizePicker";
 import Splash from "./components/Splash";
 
 const read = (key, fallback) => {
@@ -47,6 +48,8 @@ export default function Menu() {
   });
   const [sheet, setSheet] = useState(false);
   const closeSheet = useCallback(() => setSheet(false), []);
+  const [pick, setPick] = useState(null); // item whose size is being chosen
+  const closePick = useCallback(() => setPick(null), []);
   const toggleFav = useCallback(
     (id) =>
       setFavs((prev) => {
@@ -56,15 +59,24 @@ export default function Menu() {
       }),
     []
   );
-  const favItems = useMemo(() => MENU_ITEMS.filter((i) => favs.has(i.id)), [favs]);
+  // Picks = plain items, or item + chosen size (each size keeps its own price)
+  const favEntries = useMemo(
+    () =>
+      MENU_ITEMS.flatMap((item) => {
+        if (CARD_EXTRAS.sizes && item.sizes?.length)
+          return item.sizes.filter((sz) => favs.has(favKey(item, sz))).map((size) => ({ key: favKey(item, size), item, size }));
+        return favs.has(item.id) ? [{ key: item.id, item, size: null }] : [];
+      }),
+    [favs]
+  );
   useEffect(() => {
     try {
       localStorage.setItem("menu-favs", JSON.stringify([...favs]));
     } catch {}
   }, [favs]);
   useEffect(() => {
-    if (!favItems.length) setSheet(false);
-  }, [favItems.length]);
+    if (!favEntries.length) setSheet(false);
+  }, [favEntries.length]);
 
   // Scroll state: shrink the header and show the back-to-top button
   const [scrolled, setScrolled] = useState(false);
@@ -158,7 +170,7 @@ export default function Menu() {
           {!q && main === "All" && CARD_EXTRAS.upgrades && <AddonsBanner lang={lang} />}
           {sections.length ? (
             sections.map((s) => (
-              <CategorySection key={s.id} section={s} lang={lang} onZoom={setZoom} favs={favs} onToggleFav={toggleFav} />
+              <CategorySection key={s.id} section={s} lang={lang} onZoom={setZoom} favs={favs} onToggleFav={toggleFav} onPickSizes={setPick} />
             ))
           ) : (
             <div className="py-16 text-center">
@@ -181,17 +193,18 @@ export default function Menu() {
           <ArrowUp size={20} />
         </button>
       )}
-      {favItems.length > 0 && (
+      {favEntries.length > 0 && (
         <button onClick={() => setSheet(true)} className={`${floatBtn} end-4 h-12 gap-2 bg-brand-700 px-4 font-medium text-white dark:bg-brand-400 dark:text-slate-900`}>
           <Heart size={18} className="fill-current" />
           {UI.favTitle[lang]}
-          <span className="rounded-full bg-white/25 px-2 text-sm">{favItems.length}</span>
+          <span className="rounded-full bg-white/25 px-2 text-sm">{favEntries.length}</span>
         </button>
       )}
 
-      {sheet && favItems.length > 0 && (
-        <FavoritesSheet items={favItems} lang={lang} onRemove={toggleFav} onClear={() => setFavs(new Set())} onClose={closeSheet} />
+      {sheet && favEntries.length > 0 && (
+        <FavoritesSheet entries={favEntries} lang={lang} onRemove={toggleFav} onClear={() => setFavs(new Set())} onClose={closeSheet} />
       )}
+      {pick && <SizePicker item={pick} lang={lang} favs={favs} onToggle={toggleFav} onClose={closePick} />}
       {zoom && <ImageLightbox item={zoom} lang={lang} onClose={closeZoom} />}
     </div>
   );

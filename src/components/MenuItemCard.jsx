@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Heart, Utensils } from "lucide-react";
-import { CARD_EXTRAS, CATEGORIES, DIET, SHOW_IMAGES, TAG_LABELS, UI, money, upgradeLabel } from "../menuData";
+import { CARD_EXTRAS, CATEGORIES, DIET, SHOW_IMAGES, TAG_LABELS, UI, favKey, money, upgradeLabel } from "../menuData";
 import { getIcon } from "./categoryIcons";
 import CategoryArt, { hasArt } from "./CategoryArt";
 
-export default function MenuItemCard({ item, lang, index = 0, onZoom, isFav, onToggleFav }) {
+export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onToggleFav, onPickSizes }) {
   const [failed, setFailed] = useState(false);
   const [shown, setShown] = useState(false);
   const ref = useRef(null);
   const CategoryIcon = getIcon(CATEGORIES.find((c) => c.id === item.category)?.icon);
   const pill = "rounded-full bg-brand-700 px-2.5 py-1 text-xs font-bold text-white dark:bg-brand-400 dark:text-slate-900";
+  const sized = CARD_EXTRAS.sizes && item.sizes?.length > 0;
+  const isFav = sized ? item.sizes.some((sz) => favs.has(favKey(item, sz))) : favs.has(item.id);
 
   // Slide/fade in the first time the card scrolls into view
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, isFav, onT
 
   const heart = (
     <button
-      onClick={() => onToggleFav(item.id)}
+      onClick={() => (sized ? onPickSizes(item) : onToggleFav(item.id))}
       aria-pressed={isFav}
       aria-label={isFav ? UI.favRemove[lang] : UI.favAdd[lang]}
       className="flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-full transition active:scale-90 hover:bg-slate-100 dark:hover:bg-slate-700"
@@ -72,22 +74,20 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, isFav, onT
       <div className={`flex min-w-0 flex-1 flex-col gap-2 ${SHOW_IMAGES ? "p-3" : ""}`}>
         <div className="flex items-start justify-between gap-2">
           <h3 className="text-base font-bold leading-snug">{item.name[lang]}</h3>
-          {!(CARD_EXTRAS.sizes && item.sizes?.length) && (
+          {/* Prices sit on the end side of the row (left in Arabic); sizes stack vertically */}
+          {sized ? (
+            <ul className="flex shrink-0 flex-col gap-1">
+              {item.sizes.map((sz) => (
+                <li key={sz.label.en} className={`flex items-center justify-between gap-2 ${pill}`}>
+                  <span>{sz.label[lang]}</span>
+                  <span dir="ltr">{money(sz.price)}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
             <span dir="ltr" className={`shrink-0 ${pill}`}>{money(item.price)}</span>
           )}
         </div>
-
-        {/* Sizes replace the single price when enabled */}
-        {CARD_EXTRAS.sizes && item.sizes?.length > 0 && (
-          <ul className="flex flex-wrap gap-1.5">
-            {item.sizes.map((s) => (
-              <li key={s.label.en} className={`flex items-center gap-1.5 ${pill}`}>
-                <span>{s.label[lang]}</span>
-                <span dir="ltr">{money(s.price)}</span>
-              </li>
-            ))}
-          </ul>
-        )}
 
         {((CARD_EXTRAS.tags && item.tags?.length > 0) || (CARD_EXTRAS.diet && item.diet?.length > 0)) && (
           <ul className="flex flex-wrap items-center gap-1.5">
