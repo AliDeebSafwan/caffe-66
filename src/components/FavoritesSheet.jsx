@@ -1,10 +1,8 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
-import { CATEGORIES, UI, money } from "../menuData";
+import { CATEGORIES, UI, fmtPrice, money, pickTotal, pickUnit } from "../menuData";
 import { getIcon } from "./categoryIcons";
 import Stepper from "./Stepper";
-
-const fmt = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
 
 // "My picks": items (or item + chosen size) with quantities, line totals, and one grand total.
 export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose }) {
@@ -19,8 +17,7 @@ export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose 
     };
   }, [onClose]);
 
-  const unit = (e) => parseFloat(String(e.size ? e.size.price : e.item.price).replace(",", ".")) || 0;
-  const total = entries.reduce((sum, e) => sum + unit(e) * e.qty, 0);
+  const total = pickTotal(entries);
 
   return (
     <div
@@ -36,7 +33,7 @@ export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose 
       >
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold">{UI.favTitle[lang]}</h2>
-          <button autoFocus onClick={onClose} aria-label={UI.close[lang]} className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
+          <button autoFocus onClick={onClose} aria-label={UI.close[lang]} className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">
             <X size={20} />
           </button>
         </div>
@@ -62,7 +59,7 @@ export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose 
                 </span>
               </span>
               <span dir="ltr" className="w-14 text-end text-sm font-bold text-brand-700 dark:text-brand-300">
-                {money(fmt(unit(e) * e.qty))}
+                {money(fmtPrice(pickUnit(e) * e.qty))}
               </span>
               <Stepper qty={e.qty} lang={lang} onChange={(q) => onQty(e.key, q)} />
             </li>
@@ -73,7 +70,7 @@ export default function FavoritesSheet({ entries, lang, onQty, onClear, onClose 
         {/* Grand total of everything picked */}
         <div className="mt-2 flex items-center justify-between border-t border-slate-200 pt-4 text-lg font-bold dark:border-slate-600">
           <span>{UI.favTotal[lang]}</span>
-          <span dir="ltr" className="text-brand-700 dark:text-brand-300">{money(fmt(total))}</span>
+          <span dir="ltr" className="text-brand-700 dark:text-brand-300">{money(fmtPrice(total))}</span>
         </div>
 
         <button onClick={onClear} className="mt-4 w-full rounded-full bg-slate-100 py-2.5 text-sm font-medium active:scale-[.98] dark:bg-slate-700">

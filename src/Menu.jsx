@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowUp, Heart } from "lucide-react";
-import { CARD_EXTRAS, CATEGORIES, MENU_ITEMS, UI, favKey } from "./menuData";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowUp } from "lucide-react";
+import { CARD_EXTRAS, CATEGORIES, MENU_ITEMS, UI, favKey, fmtPrice, pickTotal } from "./menuData";
 import MenuHeader from "./components/MenuHeader";
 import MainTabs from "./components/MainTabs";
 import CategoryNav from "./components/CategoryNav";
@@ -12,6 +12,8 @@ import ImageLightbox from "./components/ImageLightbox";
 import FavoritesSheet from "./components/FavoritesSheet";
 import ItemModal from "./components/ItemModal";
 import SplashScreen from "./components/SplashScreen";
+import PicksBar from "./components/PicksBar";
+import FirstTimeHint from "./components/FirstTimeHint";
 
 const read = (key, fallback) => {
   try {
@@ -25,11 +27,15 @@ const read = (key, fallback) => {
 const norm = (s) =>
   s.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f\u064B-\u065F\u0670]/g, "").replace(/ة/g, "ه").replace(/ى/g, "ي").trim();
 
-const floatBtn =
-  "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex items-center justify-center rounded-full shadow-lg transition active:scale-95";
+// bottom-* is left out here since it changes when the picks bar is showing (set per-button below)
+const floatBtn = "fixed z-40 flex items-center justify-center rounded-full shadow-lg transition active:scale-95 duration-300";
 
 export default function Menu() {
-  const [lang, setLang] = useState(() => (read("menu-lang", "en") === "ar" ? "ar" : "en"));
+  const [lang, setLang] = useState(() => {
+    const saved = read("menu-lang", "");
+    if (saved === "ar" || saved === "en") return saved;
+    return (navigator.language || "").toLowerCase().startsWith("ar") ? "ar" : "en";
+  });
   const [theme, setTheme] = useState(() => {
     const saved = read("menu-theme", "");
     if (saved === "dark" || saved === "light") return saved;
@@ -58,6 +64,19 @@ export default function Menu() {
   const closeSheet = useCallback(() => setSheet(false), []);
   const [pick, setPick] = useState(null); // item whose size is being chosen
   const closePick = useCallback(() => setPick(null), []);
+  const [hintSeen, setHintSeen] = useState(() => {
+    try {
+      return !!localStorage.getItem("menu-hint-seen");
+    } catch {
+      return false;
+    }
+  });
+  const dismissHint = useCallback(() => {
+    setHintSeen(true);
+    try {
+      localStorage.setItem("menu-hint-seen", "1");
+    } catch {}
+  }, []);
 
   // Menu fades in as the splash fades out (safety timer so the page can never stay hidden)
   const [entered, setEntered] = useState(false);
@@ -66,16 +85,6 @@ export default function Menu() {
     const t = setTimeout(() => setEntered(true), 3000);
     return () => clearTimeout(t);
   }, []);
-  // Heart on a plain item: add 1 / remove. Quantities are changed in "My picks" (or the size picker).
-  const toggleFav = useCallback(
-    (key) =>
-      setFavs((prev) => {
-        const next = new Map(prev);
-        next.has(key) ? next.delete(key) : next.set(key, 1);
-        return next;
-      }),
-    []
-  );
   const setQty = useCallback(
     (key, qty) =>
       setFavs((prev) => {
@@ -96,6 +105,7 @@ export default function Menu() {
     [favs]
   );
   const favCount = favEntries.reduce((n, e) => n + e.qty, 0);
+  const favTotal = fmtPrice(pickTotal(favEntries));
   useEffect(() => {
     try {
       localStorage.setItem("menu-favs", JSON.stringify(Object.fromEntries(favs)));
@@ -104,6 +114,9 @@ export default function Menu() {
   useEffect(() => {
     if (!favEntries.length) setSheet(false);
   }, [favEntries.length]);
+  useEffect(() => {
+    if (favEntries.length && !hintSeen) dismissHint();
+  }, [favEntries.length, hintSeen, dismissHint]);
 
   // Scroll state: shrink the header and show the back-to-top button
   const [scrolled, setScrolled] = useState(false);
@@ -136,6 +149,18 @@ export default function Menu() {
   );
   const [activeId, setActiveId] = useState(sections[0]?.id);
   useEffect(() => setActiveId(sections[0]?.id), [sections]); // tab/search changed: reset the highlighted category
+
+  // Publish the sticky top bar's height as a CSS variable so each category heading can stick right under it
+  const topBarRef = useRef(null);
+  useEffect(() => {
+    const el = topBarRef.current;
+    if (!el || !("ResizeObserver" in window)) return;
+    const set = () => document.documentElement.style.setProperty("--sticky-h", `${el.offsetHeight}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const changeMain = (id) => {
     setMain(id);
@@ -179,7 +204,7 @@ export default function Menu() {
       <div className={`relative z-10 transition-opacity duration-700 ${entered ? "opacity-100" : "opacity-0"}`}>
 
       {/* Sticky top bar: header + main tabs + category anchors */}
-      <div className="sticky top-0 z-40 border-b border-slate-200 bg-slate-100/90 backdrop-blur-md transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900/90">
+      <div ref={topBarRef} className="sticky top-0 z-40 border-b border-slate-200 bg-slate-100/90 backdrop-blur-md transition-colors duration-300 dark:border-slate-800 dark:bg-slate-900/90">
         <div className="mx-auto max-w-6xl">
           <MenuHeader
             lang={lang}
@@ -195,13 +220,14 @@ export default function Menu() {
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
         <SearchBar value={query} onChange={setQuery} lang={lang} />
+        {!hintSeen && <FirstTimeHint lang={lang} onDismiss={dismissHint} />}
 
         {/* key={lang} makes the content fade in again when the language changes */}
         <div key={lang} className="fade-in space-y-10">
           {!q && main === "All" && CARD_EXTRAS.upgrades && <AddonsBanner lang={lang} />}
           {sections.length ? (
             sections.map((s) => (
-              <CategorySection key={s.id} section={s} lang={lang} onZoom={setZoom} favs={favs} onToggleFav={toggleFav} onOpen={setPick} />
+              <CategorySection key={s.id} section={s} lang={lang} onZoom={setZoom} favs={favs} onQty={setQty} onOpen={setPick} />
             ))
           ) : (
             <div className="py-16 text-center">
@@ -220,17 +246,12 @@ export default function Menu() {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label={UI.top[lang]}
           className={`${floatBtn} start-4 h-12 w-12 bg-white text-slate-700 ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700`}
+          style={{ bottom: favCount > 0 ? "calc(4.75rem + env(safe-area-inset-bottom))" : "max(1rem, env(safe-area-inset-bottom))" }}
         >
           <ArrowUp size={20} />
         </button>
       )}
-      {favEntries.length > 0 && (
-        <button onClick={() => setSheet(true)} className={`${floatBtn} end-4 h-12 gap-2 bg-brand-700 px-4 font-medium text-white dark:bg-brand-400 dark:text-slate-900`}>
-          <Heart size={18} className="fill-current" />
-          {UI.favTitle[lang]}
-          <span className="rounded-full bg-white/25 px-2 text-sm">{favCount}</span>
-        </button>
-      )}
+      {favCount > 0 && <PicksBar count={favCount} total={favTotal} lang={lang} onOpen={() => setSheet(true)} />}
 
       {sheet && favEntries.length > 0 && (
         <FavoritesSheet entries={favEntries} lang={lang} onQty={setQty} onClear={() => setFavs(new Map())} onClose={closeSheet} />

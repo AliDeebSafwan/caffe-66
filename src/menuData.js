@@ -16,6 +16,10 @@ export const CURRENCY = "$";
 export const money = (p) => `${CURRENCY}${p}`;
 // Key used by "My picks": plain item id, or "id:SizeName" when a size was chosen.
 export const favKey = (item, size) => (size ? `${item.id}:${size.label.en}` : item.id);
+// Shared by "My picks" (the sheet) and the bottom picks bar, so both total the same way.
+export const pickUnit = (e) => parseFloat(String(e.size ? e.size.price : e.item.price).replace(",", ".")) || 0;
+export const pickTotal = (entries) => entries.reduce((sum, e) => sum + pickUnit(e) * e.qty, 0);
+export const fmtPrice = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(2));
 
 // ─── 2) UI TEXT ──────────────────────────────────────────────────────────────
 export const UI = {
@@ -40,6 +44,11 @@ export const UI = {
   favTotal: { en: "Total", ar: "المجموع" },
   less: { en: "Less", ar: "أقل" },
   more: { en: "More", ar: "أكثر" },
+  firstHint: {
+    en: "Tap the + on any item to add it to My picks, then show the list to your waiter.",
+    ar: "اضغط + على أي صنف لإضافته إلى اختياراتي، ثم أرِ القائمة للنادل.",
+  },
+  viewPicks: { en: "View", ar: "عرض" },
   categoryLabel: { en: "Category", ar: "القسم" },
   priceLabel: { en: "Price", ar: "السعر" },
   waTitle: { en: "We value your feedback!", ar: "رأيك يهمنا!" },

@@ -16,7 +16,7 @@ export default function SearchBar({ value, onChange, lang }) {
         <button
           onClick={() => onChange("")}
           aria-label={UI.close[lang]}
-          className="absolute end-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
+          className="absolute end-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
         >
           <X size={18} />
         </button>

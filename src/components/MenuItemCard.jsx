@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { Heart, Utensils } from "lucide-react";
+import { Plus, Utensils } from "lucide-react";
 import { CARD_EXTRAS, CATEGORIES, DIET, SHOW_IMAGES, TAG_LABELS, UI, favKey, money, upgradeLabel } from "../menuData";
 import { getIcon } from "./categoryIcons";
 import CategoryArt, { hasArt } from "./CategoryArt";
+import Stepper from "./Stepper";
 
-export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onToggleFav, onOpen }) {
+export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onQty, onOpen }) {
   const [failed, setFailed] = useState(false);
   const [shown, setShown] = useState(false);
   const [settled, setSettled] = useState(false);
   const ref = useRef(null);
   const CategoryIcon = getIcon(CATEGORIES.find((c) => c.id === item.category)?.icon);
-  const pill = "rounded-full bg-brand-700 px-2.5 py-1 text-xs font-bold text-white dark:bg-brand-400 dark:text-slate-900";
+  // Sizes get a subtle chip (several sit side by side); a single price is plain bold text, no pill
+  const chip = "rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-800 ring-1 ring-inset ring-brand-700/15 dark:bg-brand-400/10 dark:text-brand-200 dark:ring-brand-300/20";
   const sized = CARD_EXTRAS.sizes && item.sizes?.length > 0;
-  const isFav = sized ? item.sizes.some((sz) => favs.has(favKey(item, sz))) : favs.has(item.id);
+  // Quantity already picked for this item (summed across sizes when it has them)
+  const qty = sized ? item.sizes.reduce((n, s) => n + (favs.get(favKey(item, s)) || 0), 0) : favs.get(item.id) || 0;
 
   // Stop the stagger delay once the reveal is over, so hover/press feel instant
   useEffect(() => {
@@ -41,16 +44,26 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
     return () => io.disconnect();
   }, []);
 
-  const heart = (
-    <button
-      onClick={() => (sized ? onOpen(item) : onToggleFav(item.id))}
-      aria-pressed={isFav}
-      aria-label={isFav ? UI.favRemove[lang] : UI.favAdd[lang]}
-      className="relative z-20 flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-full transition active:scale-90 hover:bg-slate-100 dark:hover:bg-slate-700"
-    >
-      <Heart size={19} className={`transition-all duration-300 ${isFav ? "scale-110 fill-rose-500 text-rose-500" : "text-slate-400"}`} />
-    </button>
-  );
+  // Fast-add control: a lone "+" when nothing is picked yet, a full − qty + once it is.
+  // Sized items always open the popup (a size must be chosen there) instead of adding directly.
+  const addControl =
+    qty > 0 && !sized ? (
+      <div className="relative z-20 self-start" onClick={(e) => e.stopPropagation()}>
+        <Stepper qty={qty} lang={lang} onChange={(q) => onQty(item.id, q)} />
+      </div>
+    ) : (
+      <button
+        onClick={() => (sized ? onOpen(item) : onQty(item.id, 1))}
+        aria-label={UI.favAdd[lang]}
+        className={`relative z-20 flex h-11 min-w-11 shrink-0 items-center justify-center self-start gap-1 rounded-full px-2 text-sm font-bold transition active:scale-90 ${
+          qty > 0
+            ? "bg-brand-700 text-white dark:bg-brand-400 dark:text-slate-900"
+            : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+        }`}
+      >
+        {qty > 0 ? qty : <Plus size={20} />}
+      </button>
+    );
 
   return (
     <article
@@ -85,15 +98,15 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
           {/* Prices sit on the end side of the row (left in Arabic); sizes stack vertically */}
           {sized ? (
             <ul className="flex shrink-0 flex-col gap-1">
-              {item.sizes.map((sz) => (
-                <li key={sz.label.en} className={`flex items-center justify-between gap-2 ${pill}`}>
-                  <span>{sz.label[lang]}</span>
-                  <span dir="ltr">{money(sz.price)}</span>
+              {item.sizes.map((s) => (
+                <li key={s.label.en} className={`flex items-center justify-between gap-2 ${chip}`}>
+                  <span>{s.label[lang]}</span>
+                  <span dir="ltr">{money(s.price)}</span>
                 </li>
               ))}
             </ul>
           ) : (
-            <span dir="ltr" className={`shrink-0 ${pill}`}>{money(item.price)}</span>
+            <span dir="ltr" className="shrink-0 text-base font-extrabold text-brand-800 dark:text-brand-300">{money(item.price)}</span>
           )}
         </div>
 
@@ -145,7 +158,7 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onTo
         aria-label={item.name[lang]}
         className="absolute inset-0 z-10 rounded-2xl focus-visible:outline-2"
       />
-      {SHOW_IMAGES ? <div className="absolute end-2 top-2 z-20 rounded-full bg-white/85 dark:bg-slate-800/85">{heart}</div> : heart}
+      {SHOW_IMAGES ? <div className="absolute end-2 top-2 z-20 rounded-full bg-white/85 dark:bg-slate-800/85">{addControl}</div> : addControl}
     </article>
   );
 }
