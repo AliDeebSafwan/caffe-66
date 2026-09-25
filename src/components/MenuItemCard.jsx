@@ -3,7 +3,6 @@ import { Plus, Utensils } from "lucide-react";
 import { CARD_EXTRAS, CATEGORIES, DIET, SHOW_IMAGES, TAG_LABELS, UI, favKey, money, upgradeLabel } from "../menuData";
 import { getIcon } from "./categoryIcons";
 import CategoryArt, { hasArt } from "./CategoryArt";
-import Stepper from "./Stepper";
 
 export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onQty, onOpen }) {
   const [failed, setFailed] = useState(false);
@@ -44,26 +43,21 @@ export default function MenuItemCard({ item, lang, index = 0, onZoom, favs, onQt
     return () => io.disconnect();
   }, []);
 
-  // Fast-add control: a lone "+" when nothing is picked yet, a full − qty + once it is.
-  // Sized items always open the popup (a size must be chosen there) instead of adding directly.
-  const addControl =
-    qty > 0 && !sized ? (
-      <div className="relative z-20 self-start" onClick={(e) => e.stopPropagation()}>
-        <Stepper qty={qty} lang={lang} onChange={(q) => onQty(item.id, q)} />
-      </div>
-    ) : (
-      <button
-        onClick={() => (sized ? onOpen(item) : onQty(item.id, 1))}
-        aria-label={UI.favAdd[lang]}
-        className={`relative z-20 flex h-11 min-w-11 shrink-0 items-center justify-center self-start gap-1 rounded-full px-2 text-sm font-bold transition active:scale-90 ${
-          qty > 0
-            ? "bg-brand-700 text-white dark:bg-brand-400 dark:text-slate-900"
-            : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
-        }`}
-      >
-        {qty > 0 ? qty : <Plus size={20} />}
-      </button>
-    );
+  // One control everywhere: "+" when nothing is picked, the running count once it is. Always adds —
+  // decreasing a quantity happens in the item popup or "My picks", never directly on the card.
+  const addControl = (
+    <button
+      onClick={() => (sized ? onOpen(item) : onQty(item.id, qty + 1))}
+      aria-label={UI.favAdd[lang]}
+      className={`relative z-20 flex h-11 min-w-11 shrink-0 items-center justify-center self-start gap-1 rounded-full px-2 text-sm font-bold transition active:scale-90 ${
+        qty > 0
+          ? "bg-brand-700 text-white dark:bg-brand-400 dark:text-slate-900"
+          : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+      }`}
+    >
+      {qty > 0 ? qty : <Plus size={20} />}
+    </button>
+  );
 
   return (
     <article

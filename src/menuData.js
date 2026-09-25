@@ -109,7 +109,7 @@ export const GENERAL_ADDONS = ["+ $0.5 Espresso Shot", "+ $0.75 Oat Milk", "+ $0
 // ─── 5) CATEGORIES ── order here = order on the page ─────────────────────────
 // id must match item.category. icon = any name exported by ./components/categoryIcons.js
 export const CATEGORIES = [
-  { id: "Crepe", icon: "Sandwich", name: { en: "Crepes", ar: "الكريب" } },
+  { id: "Crepe", icon: "Croissant", name: { en: "Crepes", ar: "الكريب" } },
   { id: "Plates", icon: "Cherry", name: { en: "Plates", ar: "الصحون" } },
   { id: "Manakish", icon: "Pizza", name: { en: "Manaqeesh & Kaak", ar: "المناقيش والكعك" } },
   { id: "Cocktail", icon: "Martini", name: { en: "Cocktails", ar: "الكوكتيل" } },

@@ -51,7 +51,7 @@ export default function MenuFooter({ lang }) {
   const hasInfo = INFO.hours?.[lang] || INFO.instagram?.handle || INFO.map || INFO.phone;
 
   return (
-    <footer className="mx-auto max-w-6xl space-y-3 px-4 pb-28">
+    <footer className="mx-auto max-w-6xl space-y-3 px-4 pb-32">
       <div className="grid gap-3 sm:grid-cols-2">
         {/* WhatsApp feedback */}
         {INFO.whatsapp && (

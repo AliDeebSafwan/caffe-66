@@ -40,7 +40,7 @@ export default function ItemModal({ item, category, lang, favs, onQty, onClose }
         <button
           onClick={onClose}
           aria-label={UI.close[lang]}
-          className="absolute end-3 top-3 flex h-10 w-10 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 active:scale-90 dark:text-slate-300 dark:hover:bg-slate-700"
+          className="absolute end-3 top-3 flex h-11 w-11 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 active:scale-90 dark:text-slate-300 dark:hover:bg-slate-700"
         >
           <X size={20} />
         </button>

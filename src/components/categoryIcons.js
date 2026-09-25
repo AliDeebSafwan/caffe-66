@@ -1,5 +1,5 @@
 import {
-  Coffee, Sandwich, Martini, CupSoda, Citrus, Cherry, Milk, Pizza, Flame, Utensils, // category icons
+  Coffee, Croissant, Martini, CupSoda, Citrus, Cherry, Milk, Pizza, Flame, Utensils, // category icons
   Vegan, WheatOff, Nut, MilkOff, // dietary icons
 } from "lucide-react";
 
@@ -7,7 +7,7 @@ import {
 // import it above, add it to this object, then set `icon: "YourIcon"` on the category.
 const ICONS = {
   Coffee, // Hot Drinks
-  Sandwich, // Crepes
+  Croissant, // Crepes
   Martini, // Cocktails
   CupSoda, // Cold Drinks (soft drinks, energy drinks, water)
   Citrus, // Fresh Juices

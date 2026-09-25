@@ -1,7 +1,7 @@
 import { Coffee, MapPin, Moon, Sun } from "lucide-react";
 import { INFO, STORE, UI } from "../menuData";
 
-const base = "flex h-10 items-center justify-center rounded-full text-sm font-medium transition-colors active:scale-95";
+const base = "flex h-11 items-center justify-center rounded-full text-sm font-medium transition-colors active:scale-95";
 const outline = `${base} border border-slate-300 text-slate-700 hover:bg-slate-200 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-700`;
 
 // compact = true once the page is scrolled: smaller logo, no tagline
@@ -38,7 +38,7 @@ export default function MenuHeader({ lang, theme, compact, onToggleLang, onToggl
           rel="noreferrer"
           aria-label={UI.map[lang]}
           title={UI.map[lang]}
-          className={`${base} w-10 shrink-0 bg-brand-700 text-white hover:bg-brand-800 dark:bg-brand-400 dark:text-slate-900 dark:hover:bg-brand-300`}
+          className={`${base} w-11 shrink-0 bg-brand-700 text-white hover:bg-brand-800 dark:bg-brand-400 dark:text-slate-900 dark:hover:bg-brand-300`}
         >
           <MapPin size={18} />
         </a>
@@ -49,7 +49,7 @@ export default function MenuHeader({ lang, theme, compact, onToggleLang, onToggl
       </button>
 
       {/* Sun and moon swap with a spin */}
-      <button onClick={onToggleTheme} className={`${outline} w-10 shrink-0`} aria-label="Toggle light and dark theme">
+      <button onClick={onToggleTheme} className={`${outline} w-11 shrink-0`} aria-label="Toggle light and dark theme">
         <span className="relative block h-[18px] w-[18px]">
           <Sun size={18} className={`${t} ${dark ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"}`} />
           <Moon size={18} className={`${t} ${dark ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"}`} />
