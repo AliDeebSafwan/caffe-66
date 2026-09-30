@@ -1,5 +1,5 @@
 import {
-  Coffee, Croissant, Martini, CupSoda, Citrus, Cherry, Milk, Pizza, Flame, Utensils, // category icons
+  Coffee, Croissant, Martini, CupSoda, Citrus, Cherry, Milk, Pizza, Flame, Leaf, GlassWater, Utensils, // category icons
   Vegan, WheatOff, Nut, MilkOff, // dietary icons
 } from "lucide-react";
 
@@ -15,6 +15,8 @@ const ICONS = {
   Milk, // Milkshakes
   Pizza, // Manaqeesh & Kaak
   Flame, // Shisha
+  Leaf, // Mojito
+  GlassWater, // Bottled Juices
   Vegan, WheatOff, Nut, MilkOff, // dietary icons
 };
 

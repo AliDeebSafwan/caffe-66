@@ -46,14 +46,14 @@ export default function MenuFooter({ lang }) {
     }
   };
 
-  const waHref = `https://wa.me/${INFO.whatsapp}?text=${encodeURIComponent(UI.waText[lang])}`;
+  const waHref = `https://wa.me/${INFO.whatsapp}`; // clean link — no prefilled message
   const link = "font-medium text-brand-700 underline-offset-2 hover:underline dark:text-brand-300";
   const hasInfo = INFO.hours?.[lang] || INFO.instagram?.handle || INFO.map || INFO.phone;
 
   return (
     <footer className="mx-auto max-w-6xl space-y-3 px-4 pb-32">
       <div className="grid gap-3 sm:grid-cols-2">
-        {/* WhatsApp feedback */}
+        {/* WhatsApp ordering */}
         {INFO.whatsapp && (
           <section className="flex flex-col rounded-3xl bg-brand-700 p-5 text-white shadow-sm dark:bg-brand-800">
             <div className="flex items-start gap-3">

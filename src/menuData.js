@@ -51,10 +51,9 @@ export const UI = {
   viewPicks: { en: "View", ar: "عرض" },
   categoryLabel: { en: "Category", ar: "القسم" },
   priceLabel: { en: "Price", ar: "السعر" },
-  waTitle: { en: "We value your feedback!", ar: "رأيك يهمنا!" },
-  waBody: { en: "Tell us how we did. Chat with us on WhatsApp.", ar: "أخبرنا عن تجربتك، وتواصل معنا عبر الواتساب." },
-  waCta: { en: "Chat with us", ar: "تواصل معنا" },
-  waText: { en: "Hello Sixty Six! I'd like to share my feedback: ", ar: "مرحباً ستة وستين! أود مشاركة رأيي: " },
+  waTitle: { en: "Quick Orders", ar: "طلب سريع" },
+  waBody: { en: "Send your order directly on WhatsApp.", ar: "أرسل طلبك مباشرة عبر الواتساب." },
+  waCta: { en: "Order via WhatsApp", ar: "اطلب عبر الواتساب" },
   wifiTitle: { en: "Wi-Fi", ar: "الواي فاي" },
   wifiName: { en: "Network", ar: "الشبكة" },
   wifiPass: { en: "Password", ar: "كلمة السر" },
@@ -100,6 +99,7 @@ export const UPGRADE_AR = {
   "+ $1 Ice Cream Scoop": "+ 1$ كرة آيس كريم",
   "+ $3 Premium Flavor": "+ 3$ نكهة مميزة",
   "+ $2 Extra Coal": "+ 2$ فحم إضافي",
+  "+ $0.50 Flavor": "+ 0.50$ نكهة",
 };
 export const upgradeLabel = (text, lang) => (lang === "ar" && UPGRADE_AR[text]) || text;
 
@@ -109,11 +109,13 @@ export const GENERAL_ADDONS = ["+ $0.5 Espresso Shot", "+ $0.75 Oat Milk", "+ $0
 // ─── 5) CATEGORIES ── order here = order on the page ─────────────────────────
 // id must match item.category. icon = any name exported by ./components/categoryIcons.js
 export const CATEGORIES = [
-  { id: "Crepe", icon: "Croissant", name: { en: "Crepes", ar: "الكريب" } },
+  { id: "Crepe", icon: "Croissant", name: { en: "Crepes & Pancakes", ar: "الكريب والبان كيك" } },
   { id: "Plates", icon: "Cherry", name: { en: "Plates", ar: "الصحون" } },
   { id: "Manakish", icon: "Pizza", name: { en: "Manaqeesh & Kaak", ar: "المناقيش والكعك" } },
   { id: "Cocktail", icon: "Martini", name: { en: "Cocktails", ar: "الكوكتيل" } },
+  { id: "Mojito", icon: "Leaf", name: { en: "Mojito", ar: "الموهيتو" } },
   { id: "NaturalJuice", icon: "Citrus", name: { en: "Fresh Juices", ar: "العصائر الطبيعية" } },
+  { id: "BottledJuice", icon: "GlassWater", name: { en: "Bottled Juices", ar: "عصائر (قنينة)" } },
   { id: "Milkshakes", icon: "Milk", name: { en: "Milkshakes", ar: "الميلك شيك" } },
   { id: "ColdDrinks", icon: "CupSoda", name: { en: "Cold Drinks", ar: "المشروبات الباردة" } },
   { id: "HotDrinks", icon: "Coffee", name: { en: "Hot Drinks", ar: "المشروبات الساخنة" } },
@@ -157,6 +159,8 @@ const IMG = {
   icetea: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&q=80",
   energy: "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?w=500&q=80",
   water: "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=500&q=80",
+  mojito: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500&q=80",
+  bottled: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=500&q=80",
 };
 
 // Prices are plain numbers (the "$" is added automatically). Items with sizes: price = lowest size.
@@ -165,11 +169,14 @@ export const MENU_ITEMS = [
   { id: "cr1", name: { en: "Nutella Crepe", ar: "كريب نوتيلا" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [], note: { en: "Classic comfort", ar: "دفء كلاسيكي" } },
   { id: "cr2", name: { en: "Oreo Crepe", ar: "كريب أوريو" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
   { id: "cr3", name: { en: "Kinder Crepe", ar: "كريب كيندر" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [], note: { en: "Kid at heart", ar: "للطفل الذي فيك" } },
-  { id: "cr4", name: { en: "Fettuccine Crepe", ar: "كريب فوتوتشيني" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
+  { id: "cr4", name: { en: "Fettuccine Crepe", ar: "كريب فوتوتشيني" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
   { id: "cr5", name: { en: "Fruits Crepe", ar: "كريب فواكه" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Fresh"] },
   { id: "cr6", name: { en: "Lotus Crepe", ar: "كريب لوتس" }, price: "6", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
   { id: "cr7", name: { en: "Dubai Chocolate Crepe", ar: "كريب شوكولا دبي" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Trending"], note: { en: "Worth a photo", ar: "تستاهل صورة" } },
   { id: "cr8", name: { en: "Sixty Six Crepe", ar: "كريب ستة وستين" }, price: "10", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: ["Signature"], note: { en: "Treat yourself", ar: "دلّع نفسك" } },
+  { id: "cr9", name: { en: "Roll Crepe", ar: "رول كريب" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
+  { id: "cr10", name: { en: "Mini Pancakes", ar: "ميني بان كيك" }, price: "3.30", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [], sizes: [sz("12 pcs", "12 حبة", "3.30"), sz("24 pcs", "24 حبة", "6")] },
+  { id: "cr12", name: { en: "Mini Pancakes with Fruits", ar: "ميني بان كيك مع فواكه" }, price: "7", image: IMG.crepe, mainCategory: "Food", category: "Crepe", upgrades: [], tags: [] },
 
   // ── Plates ──
   { id: "pl1", name: { en: "Ashta & Fruits Plate", ar: "صحن قشطة وفواكه" }, price: "10", image: IMG.plates, mainCategory: "Food", category: "Plates", upgrades: [], tags: [] },
@@ -177,7 +184,7 @@ export const MENU_ITEMS = [
   { id: "pl3", name: { en: "Ashta, Avocado & Fruits Plate", ar: "صحن قشطة أفوكادو وفواكه" }, price: "12", image: IMG.plates, mainCategory: "Food", category: "Plates", upgrades: [], tags: ["Special"], note: { en: "Sweet finish to the night", ar: "ختام حلو للسهرة" } },
 
   // ── Cocktails ──
-  { id: "ck1", name: { en: "Banana Milk", ar: "موز بحليب" }, price: "3", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "3"), sz("Large", "كبير", "4")] },
+  { id: "ck1", name: { en: "Banana Milk", ar: "موز بحليب" }, price: "4", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "4"), sz("Large", "كبير", "5")] },
   { id: "ck2", name: { en: "Banana Milk & Strawberry", ar: "موز بحليب وفريز" }, price: "3", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "3"), sz("Large", "كبير", "4")] },
   { id: "ck3", name: { en: "Avocado", ar: "أفوكادو" }, price: "5", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "5"), sz("Large", "كبير", "6")] },
   { id: "ck4", name: { en: "Avocado Nutella", ar: "أفوكادو نوتيلا" }, price: "6", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "6"), sz("Large", "كبير", "7")] },
@@ -189,18 +196,32 @@ export const MENU_ITEMS = [
   { id: "ck10", name: { en: "Sixty Six Cocktail", ar: "كوكتيل ستة وستين" }, price: "8", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: ["Signature"], note: { en: "Our signature sip", ar: "رشفتنا المميزة" } },
   { id: "ck11", name: { en: "Katyusha", ar: "كاتيوشا" }, price: "10", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], note: { en: "For the bold", ar: "للجريئين" } },
   { id: "ck12", name: { en: "Extra Fruits Cup with Ashta", ar: "كوب فواكه إكسترا مع قشطة" }, price: "9", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [] },
+  { id: "ck13", name: { en: "Cocktail Juice", ar: "كوكتيل عصير" }, price: "4", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "4"), sz("Large", "كبير", "5")] },
+
+  // ── Mojito ──
+  { id: "mj1", name: { en: "Lemon & Mint Mojito", ar: "موهيتو حامض ونعنع" }, price: "3", image: IMG.mojito, mainCategory: "Beverages", category: "Mojito", upgrades: [], tags: [] },
+  { id: "mj2", name: { en: "Pomegranate Mojito", ar: "موهيتو رمان" }, price: "3", image: IMG.mojito, mainCategory: "Beverages", category: "Mojito", upgrades: [], tags: [] },
+  { id: "mj3", name: { en: "Strawberry Mojito", ar: "موهيتو فريز" }, price: "3", image: IMG.mojito, mainCategory: "Beverages", category: "Mojito", upgrades: [], tags: [] },
+  { id: "mj4", name: { en: "Blue Hawaii Mojito", ar: "موهيتو بلو هاواي" }, price: "3", image: IMG.mojito, mainCategory: "Beverages", category: "Mojito", upgrades: [], tags: [] },
 
   // ── Fresh Juices ──
   { id: "nj1", name: { en: "Orange", ar: "برتقال" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
-  { id: "nj2", name: { en: "Orange & Carrot", ar: "برتقال وجزر" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
-  { id: "nj3", name: { en: "Carrot", ar: "جزر" }, price: "2", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
-  { id: "nj4", name: { en: "Apple", ar: "تفاح" }, price: "2", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
+  { id: "nj2", name: { en: "Orange & Carrot", ar: "برتقال وجزر" }, price: "4", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
+  { id: "nj3", name: { en: "Carrot", ar: "جزر" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "3"), sz("Large", "كبير", "4")] },
+  { id: "nj4", name: { en: "Apple", ar: "تفاح" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "3"), sz("Large", "كبير", "4")] },
   { id: "nj5", name: { en: "Lemonade & Mint", ar: "ليموناضة ونعنع" }, price: "3.50", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [], note: { en: "Instant cool-down", ar: "تبريد فوري" } },
-  { id: "nj6", name: { en: "Lemonade", ar: "ليموناضة" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
+  { id: "nj6", name: { en: "Lemonade", ar: "ليموناضة" }, price: "3", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "3"), sz("Large", "كبير", "4")] },
   { id: "nj7", name: { en: "Pomegranate", ar: "رمان" }, price: "6", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [], note: { en: "Ruby refresh", ar: "انتعاش ياقوتي" } },
   { id: "nj8", name: { en: "Strawberry", ar: "فريز" }, price: "3.50", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
   { id: "nj9", name: { en: "Mango", ar: "مانجا" }, price: "5", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
   { id: "nj10", name: { en: "Guava", ar: "جوافة" }, price: "5", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
+
+  // ── Bottled Juices ──
+  { id: "bj1", name: { en: "Strawberry", ar: "فريز" }, price: "3", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
+  { id: "bj2", name: { en: "Cocktail", ar: "كوكتيل" }, price: "5", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
+  { id: "bj3", name: { en: "Orange", ar: "برتقال" }, price: "5", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
+  { id: "bj4", name: { en: "Mango", ar: "مانجا" }, price: "7", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
+  { id: "bj5", name: { en: "Lemonade", ar: "ليموناضة" }, price: "7", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
 
   // ── Milkshakes ──
   { id: "ms1", name: { en: "Oreo", ar: "أوريو" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
@@ -210,21 +231,24 @@ export const MENU_ITEMS = [
   { id: "ms5", name: { en: "Vanilla", ar: "فانيليا" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
   { id: "ms6", name: { en: "Brownie", ar: "براوني" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
   { id: "ms7", name: { en: "Blueberry", ar: "بلوبيري" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [], note: { en: "Berry good mood", ar: "مزاج التوت" } },
+  { id: "ms8", name: { en: "Cookies", ar: "كوكيز" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
+  { id: "ms9", name: { en: "Pistachio", ar: "بيستاشيو" }, price: "5", image: IMG.shake, mainCategory: "Beverages", category: "Milkshakes", upgrades: [], tags: [] },
 
   // ── Hot Drinks ──
   { id: "hd1", name: { en: "Espresso", ar: "إسبريسو" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
-  { id: "hd2", name: { en: "Cappuccino", ar: "كابتشينو" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], note: { en: "Morning ritual", ar: "طقس الصباح" } },
+  { id: "hd2", name: { en: "Cappuccino", ar: "كابتشينو" }, price: "2", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], note: { en: "Morning ritual", ar: "طقس الصباح" } },
   { id: "hd3", name: { en: "Nescafe", ar: "نسكافيه" }, price: "2", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
   { id: "hd4", name: { en: "Hot Chocolate", ar: "هوت شوكليت" }, price: "3", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], note: { en: "A warm hug", ar: "حضنٌ دافئ" } },
   { id: "hd5", name: { en: "Turkish Coffee", ar: "قهوة تركية" }, price: "3", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], sizes: [sz("Small", "صغير", "3"), sz("Large", "كبير", "3.50")], note: { en: "Slow sip, long chat", ar: "رشفة هادئة وحديث طويل" } },
   { id: "hd6", name: { en: "Tea", ar: "شاي" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
   { id: "hd7", name: { en: "Mixed Herbal Tea", ar: "زهورات مشكلة" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [], note: { en: "Calm the evening", ar: "هدّئ مساءك" } },
+  { id: "hd8", name: { en: "Herbal Tea", ar: "زهورات" }, price: "1", image: IMG.hot, mainCategory: "Beverages", category: "HotDrinks", upgrades: [], tags: [] },
 
   // ── Shisha ──
-  { id: "sh1", name: { en: "Double Apple Edara", ar: "تفاحتين إدارة" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [], note: { en: "The classic choice", ar: "الاختيار الكلاسيكي" } },
-  { id: "sh2", name: { en: "Double Apple Gold", ar: "تفاحتين جولد" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
-  { id: "sh3", name: { en: "Lemon & Mint", ar: "حامض ونعناع" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [], note: { en: "Cool clouds", ar: "غيوم منعشة" } },
-  { id: "sh4", name: { en: "Grape", ar: "عنب" }, price: "5", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
+  { id: "sh1", name: { en: "Double Apple Edara", ar: "تفاحتين إدارة" }, price: "4.50", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [], note: { en: "The classic choice", ar: "الاختيار الكلاسيكي" } },
+  { id: "sh2", name: { en: "Double Apple Gold", ar: "تفاحتين جولد" }, price: "4.50", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
+  { id: "sh3", name: { en: "Lemon & Mint", ar: "حامض ونعناع" }, price: "4.50", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [], note: { en: "Cool clouds", ar: "غيوم منعشة" } },
+  { id: "sh4", name: { en: "Grape", ar: "عنب" }, price: "4.50", image: IMG.shisha, mainCategory: "Special", category: "Shisha", upgrades: [], tags: [] },
 
   // ── Manaqeesh & Kaak ──
   { id: "mk1", name: { en: "Zaatar", ar: "زعتر" }, price: "1", image: IMG.manakish, mainCategory: "Food", category: "Manakish", upgrades: [], tags: [] },
@@ -240,10 +264,10 @@ export const MENU_ITEMS = [
   // ── Cold Drinks ──
   { id: "cd1", name: { en: "Pepsi", ar: "بيبسي" }, price: "1.50", image: IMG.pepsi, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
   { id: "cd2", name: { en: "Ice Tea", ar: "آيس تي" }, price: "3", image: IMG.icetea, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
-  { id: "cd3", name: { en: "Red Bull", ar: "ريد بول" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
-  { id: "cd4", name: { en: "Boom Boom", ar: "بوم بوم" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd3", name: { en: "Red Bull", ar: "ريد بول" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for a different flavor", ar: "+ 0.50$ لتغيير النكهة" } },
+  { id: "cd4", name: { en: "Boom Boom", ar: "بوم بوم" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for a different flavor", ar: "+ 0.50$ لتغيير النكهة" } },
   { id: "cd5", name: { en: "Hillsburg", ar: "هيلزبورغ" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
-  { id: "cd6", name: { en: "AMP Energy", ar: "أمب" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
+  { id: "cd6", name: { en: "AMP Energy", ar: "أمب" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for a different flavor", ar: "+ 0.50$ لتغيير النكهة" } },
   { id: "cd7", name: { en: "Water", ar: "مياه" }, price: "0.50", image: IMG.water, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [], sizes: [sz("Small", "صغير", "0.50"), sz("Large", "كبير", "1.10")] },
 ];
 
