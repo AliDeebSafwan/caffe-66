@@ -185,7 +185,7 @@ export const MENU_ITEMS = [
 
   // ── Cocktails ──
   { id: "ck1", name: { en: "Banana Milk", ar: "موز بحليب" }, price: "4", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "4"), sz("Large", "كبير", "5")] },
-  { id: "ck2", name: { en: "Banana Milk & Strawberry", ar: "موز بحليب وفريز" }, price: "3", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "3"), sz("Large", "كبير", "4")] },
+  { id: "ck2", name: { en: "Banana Milk & Strawberry", ar: "موز بحليب وفريز" }, price: "4", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "4"), sz("Large", "كبير", "5")] },
   { id: "ck3", name: { en: "Avocado", ar: "أفوكادو" }, price: "5", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "5"), sz("Large", "كبير", "6")] },
   { id: "ck4", name: { en: "Avocado Nutella", ar: "أفوكادو نوتيلا" }, price: "6", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "6"), sz("Large", "كبير", "7")] },
   { id: "ck5", name: { en: "Avocado Lotus", ar: "أفوكادو لوتس" }, price: "6", image: IMG.cocktail, mainCategory: "Beverages", category: "Cocktail", upgrades: [], tags: [], sizes: [sz("Medium", "وسط", "6"), sz("Large", "كبير", "7")] },
@@ -217,8 +217,8 @@ export const MENU_ITEMS = [
   { id: "nj10", name: { en: "Guava", ar: "جوافة" }, price: "5", image: IMG.juice, mainCategory: "Beverages", category: "NaturalJuice", upgrades: [], tags: [] },
 
   // ── Bottled Juices ──
-  { id: "bj1", name: { en: "Strawberry", ar: "فريز" }, price: "3", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
-  { id: "bj2", name: { en: "Cocktail", ar: "كوكتيل" }, price: "5", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
+  { id: "bj1", name: { en: "Strawberry", ar: "فريز" }, price: "8", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
+  { id: "bj2", name: { en: "Cocktail", ar: "كوكتيل" }, price: "8", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
   { id: "bj3", name: { en: "Orange", ar: "برتقال" }, price: "5", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
   { id: "bj4", name: { en: "Mango", ar: "مانجا" }, price: "7", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
   { id: "bj5", name: { en: "Lemonade", ar: "ليموناضة" }, price: "7", image: IMG.bottled, mainCategory: "Beverages", category: "BottledJuice", upgrades: [], tags: [] },
@@ -264,10 +264,10 @@ export const MENU_ITEMS = [
   // ── Cold Drinks ──
   { id: "cd1", name: { en: "Pepsi", ar: "بيبسي" }, price: "1.50", image: IMG.pepsi, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
   { id: "cd2", name: { en: "Ice Tea", ar: "آيس تي" }, price: "3", image: IMG.icetea, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
-  { id: "cd3", name: { en: "Red Bull", ar: "ريد بول" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for a different flavor", ar: "+ 0.50$ لتغيير النكهة" } },
-  { id: "cd4", name: { en: "Boom Boom", ar: "بوم بوم" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for a different flavor", ar: "+ 0.50$ لتغيير النكهة" } },
+  { id: "cd3", name: { en: "Red Bull", ar: "ريد بول" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for an extra flavor", ar: "+ 0.50$ زيادة نكهة" } },
+  { id: "cd4", name: { en: "Boom Boom", ar: "بوم بوم" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for an extra flavor", ar: "+ 0.50$ زيادة نكهة" } },
   { id: "cd5", name: { en: "Hillsburg", ar: "هيلزبورغ" }, price: "2.50", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [] },
-  { id: "cd6", name: { en: "AMP Energy", ar: "أمب" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for a different flavor", ar: "+ 0.50$ لتغيير النكهة" } },
+  { id: "cd6", name: { en: "AMP Energy", ar: "أمب" }, price: "3", image: IMG.energy, mainCategory: "Beverages", category: "ColdDrinks", upgrades: ["+ $0.50 Flavor"], tags: [], note: { en: "+ $0.50 for an extra flavor", ar: "+ 0.50$ زيادة نكهة" } },
   { id: "cd7", name: { en: "Water", ar: "مياه" }, price: "0.50", image: IMG.water, mainCategory: "Beverages", category: "ColdDrinks", upgrades: [], tags: [], sizes: [sz("Small", "صغير", "0.50"), sz("Large", "كبير", "1.10")] },
 ];
 
